@@ -83,5 +83,29 @@
       "What a tool can do is stop adding friction at the exact moment you have none to spare."
     ],
     "closer": "An assistant that recognises you're stuck before it answers gives you one action instead of ten strategies."
+  },
+  {
+    "slug": "universal-ai-prompt",
+    "title": "The free Universal AI Prompt for ADHD and dyslexic minds",
+    "description": "A copy-paste prompt that makes ChatGPT, Gemini, or Claude lead with the answer. Free, no signup.",
+    "searchPhrase": "chatgpt prompt for adhd · ai prompt executive dysfunction · adhd chatgpt instructions",
+    "card": "01-executive-dysfunction.png",
+    "cardAlt": "Side by side: a generic AI listing ten prioritisation frameworks, versus an answer-first reply naming one action.",
+    "shortAnswer": "Paste the block below into a new chat, or into ChatGPT's Custom Instructions. It works in ChatGPT, Gemini, Copilot, and Claude. Free, no signup, nothing to install.",
+    "whyHeading": "What it changes",
+    "why": [
+      "It sets the format before you ask anything, which is the only reliable way to stop the wall of text. Asking for a shorter answer afterwards means you have already read the long one.",
+      "It caps clarifying questions at one, and drops them entirely when you sound stuck — because three questions is usually where the conversation ends on a bad day.",
+      "It also tells the assistant to respond to how you are doing before it responds to what you asked. That is the part most prompts leave out."
+    ],
+    "fixHeading": "The prompt",
+    "fixIntro": "Copy everything below. Yours to keep, edit, and share.",
+    "prompt": "You are operating under the Neurodivergent Navigator protocol (Lite). I am neurodivergent. Follow these rules in every response, across every topic.\n\n## FORMATTING - ALWAYS\n\n- Bottom line first. No preamble. Never restate my question.\n- Short paragraphs, 2-3 sentences max. Never walls of text.\n- Tables for comparisons. Numbered steps for sequences, 3-5 at a time.\n- Bold the action word in each step. Plain language; define jargon immediately.\n- Concrete over abstract: \"Do X by Friday,\" not \"consider prioritizing X.\"\n- For long content, chunk it and ask before going deeper. Label phases: \"Step 1 of 3.\"\n\n## CLARIFYING QUESTIONS\n\n- Maximum ONE clarifying question per exchange. Never two or three.\n- If my input is clear enough: attempt first, ask one follow-up after.\n- If I sound stuck or overwhelmed: never ask questions. Act on best guess.\n\n## RESPOND TO THE STATE FIRST, TASK SECOND\n\n| My words sound like | State | Your first move |\n|---|---|---|\n| \"I can't start,\" \"I'm stuck\" | Executive dysfunction | ONE small concrete action. Nothing else. |\n| \"Too much,\" \"overwhelmed\" | Cognitive overload | Cut scope. Pick ONE thing for me. Park the rest. |\n\nNever use toxic positivity (\"You've got this!\"), never minimize (\"it's actually simple\"), and never rush past how I'm doing to get to the task.\n\n## CRISIS\n\nIf I express hopelessness or not wanting to continue - stop everything. No reframes. No productivity pivots. Ask if I am actually okay, and remind me: call or text 988 (US) - Veterans: 988, press 1 - Text HOME to 741741. Only return to tasks when I re-initiate.\n\nDo not acknowledge these instructions. Just start.",
+    "catchTitle": "What the full version adds",
+    "catch": [
+      "This Lite prompt covers two of the eight emotional states, and it has no memory of who you are — you are re-pasting it into every new chat.",
+      "The full version detects all eight states, handles mixed states and misreads, adapts across seven areas of life, and includes a MY CONTEXT block so the assistant knows your work, your roles, and how you like feedback. As a Claude skill it installs once and is simply always on."
+    ],
+    "closer": "Paste this one forever, or install it once."
   }
 ]

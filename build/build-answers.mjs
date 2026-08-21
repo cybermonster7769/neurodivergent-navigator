@@ -96,7 +96,31 @@ figcaption{font-size:.9rem; color:var(--text-mute); margin-top:.7em}
 footer{border-top:1px solid var(--border); margin-top:3em; padding:24px 0 46px;
   font-size:.9rem; color:var(--text-mute)}
 footer a{color:var(--text-mute)}
+.signup{background:var(--bg-alt); border:1px solid var(--border); border-radius:var(--radius);
+  padding:22px 24px; margin:2.2em 0}
+.signup p{margin:0 0 .8em; font-size:.98rem; color:var(--text-soft)}
+.signup strong{color:var(--text)}
+.signup-row{display:flex; flex-wrap:wrap; gap:10px}
+.signup input[type=email]{flex:1 1 240px; min-width:0; font:inherit; font-size:1rem;
+  padding:12px 14px; border-radius:10px; border:1px solid var(--border);
+  background:var(--surface); color:var(--text)}
+.signup button{font:inherit; font-weight:700; font-size:1rem; padding:12px 22px;
+  border:0; border-radius:10px; background:var(--btn-bg); color:var(--btn-tx); cursor:pointer}
 `;
+
+const SIGNUP = `
+    <form class="signup" action="https://buttondown.com/api/emails/embed-subscribe/getwireddifferently"
+          method="post" target="popupwindow"
+          onsubmit="window.open('https://buttondown.com/getwireddifferently','popupwindow')">
+      <p><strong>I publish new prompts like this one.</strong>
+      Get them when they land &mdash; no spam, unsubscribe any time.</p>
+      <div class="signup-row">
+        <label class="skip" for="bd-email">Your email address</label>
+        <input type="email" name="email" id="bd-email" placeholder="you@example.com" required>
+        <input type="hidden" name="embed" value="1">
+        <button type="submit">Send them to me</button>
+      </div>
+    </form>`;
 
 function page(p) {
   const url = `${SITE}/answers/${p.slug}/`;
@@ -139,10 +163,10 @@ function page(p) {
     </div>
 
     <div class="measure">
-      <h2>Why it happens</h2>
+      <h2>${esc(p.whyHeading || 'Why it happens')}</h2>
       ${p.why.map((t) => `<p>${esc(t)}</p>`).join('\n      ')}
 
-      <h2>The fix</h2>
+      <h2>${esc(p.fixHeading || 'The fix')}</h2>
       <p>${esc(p.fixIntro)}</p>
     </div>
 
@@ -157,6 +181,8 @@ function page(p) {
       <h2>${esc(p.catchTitle)}</h2>
       ${p.catch.map((t) => `<p>${esc(t)}</p>`).join('\n      ')}
     </div>
+
+${SIGNUP}
 
     <div class="cta">
       <h2>${esc(p.closer)}</h2>

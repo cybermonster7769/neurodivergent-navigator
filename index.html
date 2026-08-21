@@ -349,6 +349,14 @@
   footer { border-top: 1px solid var(--border); padding: 30px 0 42px; color: var(--text-mute); font-size: .87rem; }
   footer p { margin: 0 0 .5em; }
 
+  /* ---------- newsletter ---------- */
+  .signup { background: var(--bg-alt); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px 26px; }
+  .signup p { margin: 0 0 .9em; font-size: .98rem; color: var(--text-soft); }
+  .signup strong { color: var(--text); }
+  .signup-row { display: flex; flex-wrap: wrap; gap: 10px; }
+  .signup input[type=email] { flex: 1 1 240px; min-width: 0; font: inherit; font-size: 1rem; padding: 12px 14px; border-radius: 10px; border: 1px solid var(--border); background: var(--surface); color: var(--text); }
+  .signup button { font: inherit; font-weight: 700; font-size: 1rem; padding: 12px 22px; border: 0; border-radius: 10px; background: var(--btn-bg); color: var(--btn-tx); cursor: pointer; }
+
   /* ---------- motion, gated on user preference ---------- */
   .rise { opacity: 0; transform: translateY(14px); transition: opacity .55s ease, transform .55s ease; }
   .rise.in { opacity: 1; transform: none; }
@@ -651,6 +659,25 @@
     </div>
   </section>
 
+  <!-- ================= NEWSLETTER ================= -->
+  <section style="padding-top:0">
+    <div class="wrap narrow">
+      <form class="signup" action="https://buttondown.com/api/emails/embed-subscribe/getwireddifferently"
+            method="post" target="popupwindow"
+            onsubmit="window.open('https://buttondown.com/getwireddifferently','popupwindow')">
+        <p><strong>Not ready to buy? Take the free prompt instead.</strong>
+        The <a href="/answers/universal-ai-prompt/">Universal AI Prompt</a> works in ChatGPT, Gemini, or Claude —
+        no signup. Or leave your email and I&rsquo;ll send new ones as I publish them.</p>
+        <div class="signup-row">
+          <label class="skip" for="bd-email">Your email address</label>
+          <input type="email" name="email" id="bd-email" placeholder="you@example.com" required>
+          <input type="hidden" name="embed" value="1">
+          <button type="submit">Send them to me</button>
+        </div>
+      </form>
+    </div>
+  </section>
+
 </main>
 
 <footer>
@@ -660,6 +687,8 @@
       <a href="/answers/ai-asks-too-many-questions/">Why it asks three questions first</a> ·
       <a href="/answers/ai-gives-too-many-options/">Why it gives ten options</a> ·
       <a href="/answers/adhd-cant-start-task/">When you can&rsquo;t start</a></p>
+    <p><strong>Free:</strong>
+      <a href="/answers/universal-ai-prompt/">The Universal AI Prompt</a> — works in ChatGPT, Gemini, or Claude. No signup.</p>
     <p><strong>Neurodivergent Navigator</strong> — built for ADHD &amp; dyslexic minds.</p>
     <p>Not a medical or mental-health tool. In a crisis in the US: call or text <strong>988</strong> (veterans press 1), or text <strong>HOME</strong> to <strong>741741</strong>.</p>
   </div>
