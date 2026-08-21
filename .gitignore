@@ -1,2 +1,6 @@
 .DS_Store
 Thumbs.db
+
+# Never publish the paid product from this PUBLIC repo
+*.zip
+*.skill
