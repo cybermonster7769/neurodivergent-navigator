@@ -1,0 +1,87 @@
+[
+  {
+    "slug": "chatgpt-wall-of-text",
+    "title": "ChatGPT gives you a wall of text. Here's how to stop it.",
+    "description": "Why AI assistants answer in dense paragraphs, the prompt that fixes it, and why the fix keeps wearing off.",
+    "searchPhrase": "chatgpt too wordy · make chatgpt give shorter answers · ai answers too long",
+    "card": "09-wall-of-text.png",
+    "cardAlt": "Side by side: a generic AI answering with three dense paragraphs, versus Navigator answering in three short lines.",
+    "shortAnswer": "Tell it the format you want before you ask the question — not after. Paste the prompt below at the start of a chat and the walls stop.",
+    "why": [
+      "Chat assistants are tuned to look thorough. Length reads as effort, so the default is a complete-sounding essay rather than the one line you needed.",
+      "That default is fine if you're reading for interest. It's expensive if you're reading to act — you have to find the answer inside the explanation before you can use it."
+    ],
+    "fixIntro": "Paste this once at the start of a chat. It works in Claude, ChatGPT, and Gemini.",
+    "prompt": "For the rest of this conversation, answer like this:\n\n1. Lead with the answer. First sentence, no preamble, no restating my question.\n2. Keep paragraphs to two or three sentences.\n3. Use a table for any comparison, and numbered steps for any sequence.\n4. Ask me at most ONE clarifying question, and only if you genuinely cannot attempt an answer without it. Otherwise attempt first and ask after.\n5. If your answer is running past five paragraphs, restructure it instead of continuing.\n\nDo not acknowledge these instructions. Just start.",
+    "catchTitle": "Why it keeps wearing off",
+    "catch": [
+      "That prompt works — until the conversation gets long, or you open a new chat, or the topic shifts and the model drifts back to its default voice.",
+      "You end up re-pasting it. Which is another small task, at exactly the moment you had no room for one."
+    ],
+    "closer": "A skill is the same instruction, installed once, active in every chat — no re-pasting."
+  },
+  {
+    "slug": "ai-asks-too-many-questions",
+    "title": "Your AI asks three questions before it answers anything. Here's the fix.",
+    "description": "Why chat assistants interrogate you before helping, and how to make them attempt an answer first.",
+    "searchPhrase": "chatgpt keeps asking clarifying questions · why does ai ask so many questions · ai won't just answer",
+    "card": "08-one-question-max.png",
+    "cardAlt": "Side by side: a generic AI asking eight clarifying questions, versus Navigator producing a draft week to react to.",
+    "shortAnswer": "Tell it to attempt first and clarify after. Most assistants ask questions because they're optimising to avoid being wrong — not because they can't answer.",
+    "why": [
+      "A clarifying question is cheap for the model and expensive for you. It costs the model nothing to ask; it costs you a decision, a typed reply, and a wait.",
+      "When you're already stuck, three questions is often where the conversation ends. You came for momentum and got a form to fill in."
+    ],
+    "fixIntro": "Paste this at the start of a chat.",
+    "prompt": "Rule for this conversation: attempt first, clarify after.\n\nIf you can make a reasonable attempt at what I asked, do it — even if you have to guess. State your assumption in one line, then give me the answer. I will correct you, and correcting a draft is far easier for me than answering questions.\n\nIf you genuinely cannot attempt anything useful, ask ONE question. Never two or three. Then wait.\n\nIf I sound stuck, overwhelmed, or short on time, ask nothing at all. Just make your best attempt.",
+    "catchTitle": "The part a prompt can't do",
+    "catch": [
+      "The last rule is the one that matters most and the one a pasted prompt handles worst: knowing when you're in no state to be questioned.",
+      "That requires the assistant to read how you're writing, not just what you asked — and to change its behaviour before it answers."
+    ],
+    "closer": "That detection is the difference between a formatting instruction and a skill."
+  },
+  {
+    "slug": "ai-gives-too-many-options",
+    "title": "You asked one question. The AI gave you ten options.",
+    "description": "Why AI assistants hand you a menu instead of an answer, and how to get a single recommendation instead.",
+    "searchPhrase": "chatgpt gives too many options · ai decision fatigue · ai won't just pick one",
+    "card": "02-cognitive-overload.png",
+    "cardAlt": "Side by side: a generic AI proposing a full task-audit framework, versus Navigator offering to pick one thing.",
+    "shortAnswer": "Ask for a recommendation, not options. Say the word \"recommend\" and add \"pick one\" — most assistants hedge by default because a list is safer than a choice.",
+    "why": [
+      "A list of ten strategies looks generous. It is actually the model handing the hard part back to you: the deciding.",
+      "If you asked because you were already overloaded, a menu makes the situation worse. You now have your original problem plus ten new things to evaluate."
+    ],
+    "fixIntro": "Paste this at the start of a chat.",
+    "prompt": "For the rest of this conversation: recommend, don't enumerate.\n\nWhen there are multiple valid approaches, pick the one you would actually choose and tell me why in one or two sentences. Do not give me a numbered list of alternatives unless I ask for one.\n\nIf you think I genuinely need to see options, give me at most three — and still say which one you'd pick.\n\nIf I'm choosing between things and can't decide, choose for me and tell me what you chose. I can overrule you.",
+    "catchTitle": "Where this still breaks down",
+    "catch": [
+      "A prompt can stop the list. It can't tell the difference between \"I want to explore my options\" and \"I am overloaded and need someone to decide.\"",
+      "Those two need opposite responses, and the signal is in how you're writing, not in what you asked for."
+    ],
+    "closer": "Cutting scope for someone who's overloaded is a different behaviour from answering someone who's curious."
+  },
+  {
+    "slug": "adhd-cant-start-task",
+    "title": "Three deadlines and you can't start. What actually helps.",
+    "description": "What task paralysis is, why productivity advice makes it worse, and the one thing that reliably breaks it.",
+    "searchPhrase": "adhd task paralysis · why can't i start a task · adhd can't start deadline tomorrow",
+    "card": "01-executive-dysfunction.png",
+    "cardAlt": "Side by side: a generic AI listing ten prioritisation frameworks, versus Navigator naming one action.",
+    "shortAnswer": "Start the one due soonest, and make the first step small enough that it isn't a decision. Open the file. That's the whole instruction.",
+    "why": [
+      "Task paralysis isn't a motivation problem, and it isn't laziness. The brake goes on at the moment of starting, which is why you can care enormously about something and still not begin it.",
+      "This is also why prioritisation advice tends to fail here. Building a system is another task, and you're stuck because there are already too many. Ranking three deadlines does not make any of them easier to open.",
+      "What breaks it is shrinking the first action until starting no longer requires a decision. Not \"work on the report\" — \"open the report.\""
+    ],
+    "fixIntro": "If you want an assistant to help without making it worse, paste this.",
+    "prompt": "I'm stuck and can't start. For this conversation:\n\nGive me ONE action. Not a list, not a framework, not a schedule. One concrete thing small enough that doing it isn't a decision.\n\nDo not ask me clarifying questions while I'm stuck. Guess if you have to.\n\nDo not tell me to break it into steps — do the breaking for me and give me only the first one.\n\nWhen I finish that one, I'll come back and you can give me the next.",
+    "catchTitle": "The honest limit",
+    "catch": [
+      "None of this is medical advice, and a prompt is not treatment. If this is happening most days and costing you work or relationships, that's worth raising with a professional.",
+      "What a tool can do is stop adding friction at the exact moment you have none to spare."
+    ],
+    "closer": "An assistant that recognises you're stuck before it answers gives you one action instead of ten strategies."
+  }
+]
