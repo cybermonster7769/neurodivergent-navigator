@@ -205,4 +205,34 @@ for (const p of pages) {
   console.log(`  answers/${p.slug}/`);
 }
 
+// Sitemap + robots, so the answer pages are discoverable rather than orphaned.
+const today = new Date().toISOString().slice(0, 10);
+const urls = [
+  { loc: `${SITE}/`, priority: '1.0' },
+  ...pages.map((p) => ({ loc: `${SITE}/answers/${p.slug}/`, priority: '0.8' })),
+];
+
+writeFileSync(
+  join(ROOT, 'sitemap.xml'),
+  `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${urls
+  .map(
+    (u) =>
+      `  <url>\n    <loc>${u.loc}</loc>\n    <lastmod>${today}</lastmod>\n    <priority>${u.priority}</priority>\n  </url>`
+  )
+  .join('\n')}
+</urlset>
+`,
+  'utf8'
+);
+
+writeFileSync(
+  join(ROOT, 'robots.txt'),
+  `User-agent: *\nAllow: /\n\nSitemap: ${SITE}/sitemap.xml\n`,
+  'utf8'
+);
+
+console.log(`  sitemap.xml (${urls.length} urls)`);
+console.log(`  robots.txt`);
 console.log(`\n${pages.length} answer pages written`);
