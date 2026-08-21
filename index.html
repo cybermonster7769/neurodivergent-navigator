@@ -1,0 +1,715 @@
+<!doctype html>
+<html lang="en" data-theme="auto">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Neurodivergent Navigator — AI that leads with the answer</title>
+<style>
+  /* ============================================================
+     Neurodivergent Navigator — landing page
+     Design rule: the page must obey the product's own principles.
+     Bottom line first. No walls of text. Low visual stress.
+     Dyslexia-friendly: generous line-height, left-aligned always,
+     never justified, capped line length, no pure-black-on-white.
+     ============================================================ */
+
+  :root {
+    --bg:        #faf7f2;   /* warm off-white, not #fff — less glare */
+    --bg-alt:    #f3eee6;
+    --surface:   #fffdfa;
+    --border:    #e2dace;
+    --text:      #23201c;   /* deep warm charcoal, not pure black */
+    --text-soft: #574f45;
+    --text-mute: #6d6459;
+    --accent:    #0d6560;
+    --accent-lo: #e3f1ef;
+    --accent-tx: #0b4f4b;
+    --warn:      #8a5a12;
+    --warn-lo:   #fbf1de;
+    --btn-bg:    #0d6560;
+    --btn-tx:    #ffffff;
+    --shadow:    0 1px 2px rgba(35,32,28,.05), 0 8px 24px -12px rgba(35,32,28,.16);
+    --radius:    14px;
+    --maxw:      1080px;
+    --measure:   64ch;  /* capped line length aids tracking */
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg:        #171512;
+      --bg-alt:    #1e1b17;
+      --surface:   #211e1a;
+      --border:    #363029;
+      --text:      #f2ede5;
+      --text-soft: #cdc4b8;
+      --text-mute: #a89e92;
+      --accent:    #5eead4;
+      --accent-lo: #16302e;
+      --accent-tx: #7ff0dc;
+      --warn:      #e8bd7a;
+      --warn-lo:   #2e2517;
+      --btn-bg:    #5eead4;
+      --btn-tx:    #10302c;
+      --shadow:    0 1px 2px rgba(0,0,0,.4), 0 10px 30px -12px rgba(0,0,0,.6);
+    }
+  }
+  /* Manual toggle must beat the media query in both directions */
+  :root[data-theme="dark"] {
+    --bg:#171512; --bg-alt:#1e1b17; --surface:#211e1a; --border:#363029;
+    --text:#f2ede5; --text-soft:#cdc4b8; --text-mute:#a89e92;
+    --accent:#5eead4; --accent-lo:#16302e; --accent-tx:#7ff0dc;
+    --warn:#e8bd7a; --warn-lo:#2e2517;
+    --btn-bg:#5eead4; --btn-tx:#10302c;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 30px -12px rgba(0,0,0,.6);
+  }
+  :root[data-theme="light"] {
+    --bg:#faf7f2; --bg-alt:#f3eee6; --surface:#fffdfa; --border:#e2dace;
+    --text:#23201c; --text-soft:#574f45; --text-mute:#6d6459;
+    --accent:#0d6560; --accent-lo:#e3f1ef; --accent-tx:#0b4f4b;
+    --warn:#8a5a12; --warn-lo:#fbf1de;
+    --btn-bg:#0d6560; --btn-tx:#ffffff;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { -webkit-text-size-adjust: 100%; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+                 "Helvetica Neue", Arial, sans-serif;
+    font-size: 17px;
+    line-height: 1.7;            /* generous leading */
+    letter-spacing: .01em;       /* slight tracking aids dyslexic reading */
+    text-align: left;            /* never justify */
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap { width: 100%; max-width: var(--maxw); margin: 0 auto; padding: 0 22px; }
+  .measure { max-width: var(--measure); }
+
+  h1, h2, h3 { line-height: 1.22; letter-spacing: -.015em; margin: 0 0 .5em; text-wrap: balance; }
+  h1 { font-size: clamp(2rem, 5.2vw, 3.15rem); font-weight: 800; }
+  h2 { font-size: clamp(1.45rem, 3.2vw, 2.05rem); font-weight: 750; }
+  h3 { font-size: 1.06rem; font-weight: 700; }
+  p  { margin: 0 0 1.05em; }
+  strong { font-weight: 700; }
+
+  a { color: var(--accent-tx); }
+
+  /* Visible focus for keyboard users — non-negotiable here */
+  :focus-visible {
+    outline: 3px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+
+  .skip {
+    position: absolute; left: -9999px; top: 0;
+    background: var(--surface); color: var(--text);
+    padding: 12px 18px; z-index: 100; border-radius: 0 0 10px 0;
+    font-weight: 700; box-shadow: var(--shadow);
+  }
+  .skip:focus { left: 0; }
+
+  /* ---------- header ---------- */
+  header.bar {
+    position: sticky; top: 0; z-index: 40;
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+  }
+  .bar-in { display: flex; align-items: center; gap: 14px; padding: 11px 0; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; letter-spacing: -.02em; }
+  .mark {
+    width: 30px; height: 30px; border-radius: 9px; flex: none;
+    background: var(--accent-lo);
+    border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+    display: grid; place-items: center;
+    color: var(--accent-tx); font-weight: 900; font-size: .92rem;
+  }
+  .bar-sp { margin-left: auto; }
+
+  .tbtn {
+    font: inherit; font-size: .85rem; font-weight: 650;
+    color: var(--text-soft);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 999px; padding: 7px 15px; cursor: pointer;
+    display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+    min-height: 44px;  /* WCAG 2.5.8 tap target */
+  }
+  .tbtn:hover { color: var(--text); border-color: var(--accent); }
+
+  /* ---------- buttons ---------- */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+    background: var(--btn-bg); color: var(--btn-tx);
+    font: inherit; font-weight: 750; font-size: 1.02rem;
+    padding: 15px 27px; border: 0; border-radius: 12px;
+    cursor: pointer; text-decoration: none;
+    box-shadow: var(--shadow);
+    transition: transform .16s ease, filter .16s ease;
+  }
+  .btn:hover { filter: brightness(1.07); transform: translateY(-1px); }
+  .btn:active { transform: translateY(0); }
+  .btn .amt { opacity: .82; font-weight: 650; }
+
+  .btn-ghost {
+    display: inline-flex; align-items: center; gap: 8px;
+    color: var(--text-soft); text-decoration: none; font-weight: 650;
+    padding: 15px 20px; border-radius: 12px; border: 1px solid var(--border);
+    background: transparent;
+  }
+  .btn-ghost:hover { color: var(--text); border-color: var(--accent); }
+
+  .cta-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+  .cta-note { font-size: .87rem; color: var(--text-mute); margin: 12px 0 0; }
+
+  /* ---------- sections ---------- */
+  section { padding: clamp(48px, 8vw, 84px) 0; }
+  .sec-alt { background: var(--bg-alt); border-block: 1px solid var(--border); }
+  .eyebrow {
+    text-transform: uppercase; letter-spacing: .13em; font-size: .74rem;
+    font-weight: 800; color: var(--accent-tx); margin: 0 0 12px;
+  }
+  .lede { font-size: 1.1rem; color: var(--text-soft); }
+
+  /* ---------- hero ---------- */
+  .hero { padding-top: clamp(38px, 6vw, 62px); }
+  .hero-grid { display: grid; gap: clamp(30px, 5vw, 52px); grid-template-columns: 1fr; align-items: start; }
+  @media (min-width: 900px) { .hero-grid { grid-template-columns: 1.08fr .92fr; } }
+
+  .pill {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--accent-lo); color: var(--accent-tx);
+    border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+    border-radius: 999px; padding: 6px 14px;
+    font-size: .8rem; font-weight: 700; margin-bottom: 18px;
+  }
+  .kicker { font-size: 1.14rem; color: var(--text-soft); }
+  .kicker b { color: var(--text); }
+
+  .price-line { display: flex; align-items: baseline; gap: 10px; margin: 4px 0 20px; flex-wrap: wrap; }
+  .price-big { font-size: 2.1rem; font-weight: 800; letter-spacing: -.03em; }
+  .price-sub { color: var(--text-mute); font-size: .92rem; }
+
+  figure.shot { margin: 0; }
+  figure.shot img {
+    display: block; width: 100%; height: auto;
+    border-radius: var(--radius); border: 1px solid var(--border);
+    box-shadow: var(--shadow); background: var(--surface);
+  }
+  figure.shot figcaption { font-size: .82rem; color: var(--text-mute); margin-top: 10px; }
+
+  /* facts strip — factual, not fabricated proof */
+  .facts {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px;
+    background: var(--border); border: 1px solid var(--border);
+    border-radius: var(--radius); overflow: hidden; margin-top: 28px;
+  }
+  @media (min-width: 620px) { .facts { grid-template-columns: repeat(4, 1fr); } }
+  .fact { background: var(--surface); padding: 16px 15px; }
+  .fact b { display: block; font-size: 1.42rem; font-weight: 800; letter-spacing: -.02em; }
+  .fact span { font-size: .79rem; color: var(--text-mute); line-height: 1.45; display: block; }
+
+  /* ---------- the demo (conversion centrepiece) ---------- */
+  .demo { display: grid; gap: 18px; grid-template-columns: 1fr; margin-top: 26px; }
+  @media (min-width: 860px) { .demo { grid-template-columns: 1fr 1fr; gap: 20px; } }
+
+  .card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 22px; box-shadow: var(--shadow);
+  }
+  .card-head { display: flex; align-items: center; gap: 9px; margin-bottom: 14px; flex-wrap: wrap; }
+  .tag {
+    font-size: .71rem; font-weight: 800; text-transform: uppercase; letter-spacing: .09em;
+    padding: 4px 9px; border-radius: 6px;
+  }
+  .tag-bad  { background: var(--warn-lo); color: var(--warn); }
+  .tag-good { background: var(--accent-lo); color: var(--accent-tx); }
+
+  .chat { font-size: .93rem; line-height: 1.68; color: var(--text-soft); }
+  .chat .you {
+    display: block; color: var(--text); font-weight: 700;
+    padding: 11px 13px; background: var(--bg-alt);
+    border-radius: 10px; margin-bottom: 14px; font-size: .92rem;
+  }
+  .wall { max-height: 190px; overflow: hidden; position: relative; }
+  .wall::after {
+    content: ""; position: absolute; inset: auto 0 0 0; height: 76px;
+    background: linear-gradient(to bottom, transparent, var(--surface));
+  }
+  .wall p { margin-bottom: .7em; }
+  .qmark { color: var(--warn); font-weight: 700; }
+
+  /* The payoff of the demo — a filled panel carries more weight than a
+     side rule, and reads as "here is the answer" rather than "here is a quote". */
+  .answer-first {
+    font-size: 1.04rem; font-weight: 750; color: var(--text);
+    background: var(--accent-lo); border-radius: 10px;
+    padding: 13px 15px; margin-bottom: 14px;
+  }
+  .detect {
+    font-size: .8rem; color: var(--accent-tx); background: var(--accent-lo);
+    display: inline-block; padding: 5px 11px; border-radius: 7px;
+    font-weight: 700; margin-bottom: 12px;
+  }
+  .one-q { color: var(--text); font-weight: 650; }
+
+  /* ---------- generic grids ---------- */
+  .grid { display: grid; gap: 16px; grid-template-columns: 1fr; }
+  @media (min-width: 640px) { .grid-2 { grid-template-columns: 1fr 1fr; } }
+  @media (min-width: 760px) { .grid-3 { grid-template-columns: repeat(3, 1fr); } }
+  @media (min-width: 880px) { .grid-4 { grid-template-columns: repeat(4, 1fr); } }
+
+  .feat { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; }
+  .feat h3 { margin-bottom: 6px; }
+  .feat p { margin: 0; font-size: .93rem; color: var(--text-soft); }
+  .ico {
+    width: 34px; height: 34px; border-radius: 9px; margin-bottom: 12px;
+    background: var(--accent-lo); color: var(--accent-tx);
+    display: grid; place-items: center; font-size: 1.05rem;
+  }
+
+  /* states */
+  .states { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
+  .state {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 999px; padding: 9px 16px; font-size: .9rem; font-weight: 650;
+  }
+  .state em { font-style: normal; color: var(--accent-tx); }
+
+  /* domains */
+  .doms { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 20px; }
+  .dom {
+    border: 1px dashed var(--border); border-radius: 10px;
+    padding: 8px 14px; font-size: .89rem; color: var(--text-soft); background: var(--surface);
+  }
+
+  /* included list */
+  ul.inc { list-style: none; padding: 0; margin: 22px 0 0; display: grid; gap: 12px; }
+  ul.inc li {
+    display: flex; gap: 13px; align-items: flex-start;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 16px 18px;
+  }
+  ul.inc .chk {
+    flex: none; width: 22px; height: 22px; border-radius: 50%;
+    background: var(--accent-lo); color: var(--accent-tx);
+    display: grid; place-items: center; font-size: .76rem; font-weight: 900; margin-top: 2px;
+  }
+  ul.inc b { display: block; }
+  ul.inc span { font-size: .9rem; color: var(--text-soft); }
+
+  /* steps */
+  ol.steps { list-style: none; counter-reset: s; padding: 0; margin: 24px 0 0; display: grid; gap: 14px; }
+  @media (min-width: 760px) { ol.steps { grid-template-columns: repeat(4, 1fr); } }
+  ol.steps li { counter-increment: s; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 18px; }
+  ol.steps li::before {
+    content: counter(s); display: grid; place-items: center;
+    width: 28px; height: 28px; border-radius: 8px;
+    background: var(--accent); color: var(--btn-tx);
+    font-weight: 800; font-size: .88rem; margin-bottom: 11px;
+  }
+  :root[data-theme="dark"] ol.steps li::before,
+  :root:not([data-theme="light"]) ol.steps li::before { color: #10302c; }
+  ol.steps p { margin: 0; font-size: .92rem; color: var(--text-soft); }
+
+  /* fit / not fit */
+  .fit { display: grid; gap: 18px; grid-template-columns: 1fr; }
+  @media (min-width: 780px) { .fit { grid-template-columns: 1fr 1fr; } }
+  .fit-col { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 22px; }
+  .fit-col ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 11px; }
+  .fit-col li { display: flex; gap: 11px; font-size: .94rem; color: var(--text-soft); }
+  .fit-col li i { font-style: normal; flex: none; font-weight: 800; }
+  .yes i { color: var(--accent-tx); }
+  .no  i { color: var(--warn); }
+
+  /* honesty / policy block */
+  /* Honest disclosures earn a tinted field of their own rather than a
+     side rule — the whole block reads as "read this", not just its edge. */
+  .note {
+    border: 1px solid color-mix(in srgb, var(--warn) 32%, var(--border));
+    background: var(--warn-lo); border-radius: 12px; padding: 18px 20px;
+    font-size: .92rem; color: var(--text-soft);
+  }
+  .note b { color: var(--text); }
+  .note + .note { margin-top: 14px; }
+
+  /* final cta */
+  .final {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 20px; padding: clamp(28px, 5vw, 48px);
+    box-shadow: var(--shadow); text-align: left;
+  }
+
+  footer { border-top: 1px solid var(--border); padding: 30px 0 42px; color: var(--text-mute); font-size: .87rem; }
+  footer p { margin: 0 0 .5em; }
+
+  /* ---------- motion, gated on user preference ---------- */
+  .rise { opacity: 0; transform: translateY(14px); transition: opacity .55s ease, transform .55s ease; }
+  .rise.in { opacity: 1; transform: none; }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: .001ms !important; animation-iteration-count: 1 !important;
+        transition-duration: .001ms !important; scroll-behavior: auto !important; }
+    .rise { opacity: 1 !important; transform: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to main content</a>
+
+<header class="bar">
+  <div class="wrap bar-in">
+    <div class="brand">
+      <span class="mark" aria-hidden="true">N</span>
+      <span>Neurodivergent&nbsp;Navigator</span>
+    </div>
+    <div class="bar-sp"></div>
+    <button class="tbtn" id="theme" type="button" aria-live="polite">
+      <span aria-hidden="true" id="theme-ico">◐</span><span id="theme-txt">Theme</span>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- ================= HERO: bottom line first ================= -->
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <span class="pill"><span aria-hidden="true">✦</span> A Claude AI skill · ADHD &amp; dyslexia</span>
+
+        <h1>AI that leads with the&nbsp;answer.</h1>
+
+        <p class="kicker measure">
+          You've tried AI tools. They give you walls of text, generic advice, ten options
+          when you needed one — and zero awareness that you were already overwhelmed
+          before you started typing. <b>That's not a you problem. That's a tool problem.</b>
+        </p>
+
+        <div class="price-line">
+          <span class="price-big" data-gumroad-field="price">$47</span>
+          <span class="price-sub">one-time · instant download · 16.3&nbsp;KB toolkit</span>
+        </div>
+
+        <div class="cta-row">
+          <a class="btn" href="#" data-gumroad-action="buy">
+            Get the skill <span class="amt" data-gumroad-field="price">$47</span>
+          </a>
+          <a class="btn-ghost" href="#demo">See it in action ↓</a>
+        </div>
+        <p class="cta-note">Installs in under 10 minutes. No refunds — please read <a href="#policy">the policy</a> first.</p>
+      </div>
+
+      <figure class="shot">
+        <img
+          src="https://public-files.gumroad.com/38hqc1sd7pd267jskjhwun1p8rf5"
+          width="1280" height="720" loading="eager" decoding="async"
+          alt="Neurodivergent Navigator AI Skill for ADHD and dyslexic minds — product cover."
+          onerror="this.closest('figure').style.display='none'" />
+        <figcaption>Works in Claude via Settings → Skills. A Universal AI Prompt is included for ChatGPT, Gemini, and other chat tools.</figcaption>
+      </figure>
+    </div>
+
+    <div class="wrap">
+      <div class="facts rise">
+        <div class="fact"><b>8</b><span>emotional states detected</span></div>
+        <div class="fact"><b>7</b><span>life domains with their own protocol</span></div>
+        <div class="fact"><b>14</b><span>ready-to-use prompts</span></div>
+        <div class="fact"><b>1</b><span>question max, ever</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= THE DEMO ================= -->
+  <section class="sec-alt" id="demo">
+    <div class="wrap">
+      <p class="eyebrow">The difference</p>
+      <h2>Same question. Two very different&nbsp;answers.</h2>
+      <p class="lede measure">
+        This is the whole product in one screen. Nothing here is a mock-up of a
+        different tool — it's the behaviour the skill installs.
+      </p>
+
+      <div class="demo">
+        <div class="card">
+          <div class="card-head">
+            <span class="tag tag-bad">Generic AI</span>
+            <span style="font-size:.82rem;color:var(--text-mute)">wall of text · 3 questions back</span>
+          </div>
+          <div class="chat">
+            <span class="you">"I have 3 deadlines tomorrow and I can't start."</span>
+            <div class="wall" aria-label="An overwhelming wall of generic AI text">
+              <p>Great question! Managing multiple competing deadlines can certainly feel
+              overwhelming, and it's completely understandable that you're experiencing
+              difficulty initiating your work right now.</p>
+              <p>Let me walk you through a comprehensive framework for prioritisation.
+              First, it's important to understand the underlying causes of task paralysis,
+              which research suggests may stem from a combination of factors including
+              perfectionism, fear of failure, and cognitive load…</p>
+              <p>Here are ten strategies you might consider: 1) The Eisenhower Matrix,
+              2) Time-blocking, 3) The Pomodoro Technique, 4) Eating the frog, 5) Chunking…</p>
+            </div>
+            <p style="margin-top:14px">
+              <span class="qmark">Would you like me to elaborate on any of these?
+              Should I help you prioritise? Do you want me to build a schedule?</span>
+            </p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <span class="tag tag-good">With Navigator</span>
+            <span style="font-size:.82rem;color:var(--text-mute)">answer first · 1 question</span>
+          </div>
+          <div class="chat">
+            <span class="you">"I have 3 deadlines tomorrow and I can't start."</span>
+            <p class="answer-first">Start with the one due soonest. Open the file. That's it for now.</p>
+            <span class="detect">Detected: executive dysfunction</span>
+            <p>You don't need a productivity system right now — building one is another
+            task, and you already have three. You need one action small enough that
+            starting it isn't a decision.</p>
+            <p class="one-q">Which deadline is closest?</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= WHAT CHANGES ================= -->
+  <section>
+    <div class="wrap">
+      <p class="eyebrow">What changes the moment you install it</p>
+      <h2>It doesn't change what Claude says. It changes how Claude shows up.</h2>
+
+      <div class="grid grid-3" style="margin-top:26px">
+        <div class="feat rise">
+          <div class="ico" aria-hidden="true">↑</div>
+          <h3>Bottom line first. Always.</h3>
+          <p>No preamble. No restating your question back at you. The answer comes first, every time.</p>
+        </div>
+        <div class="feat rise">
+          <div class="ico" aria-hidden="true">◈</div>
+          <h3>Emotionally aware</h3>
+          <p>It responds to where you are before it responds to what you asked.</p>
+        </div>
+        <div class="feat rise">
+          <div class="ico" aria-hidden="true">?</div>
+          <h3>One question max</h3>
+          <p>When clarification is needed it asks exactly one — never three, and never while you're already struggling.</p>
+        </div>
+        <div class="feat rise">
+          <div class="ico" aria-hidden="true">⌸</div>
+          <h3>Session management</h3>
+          <p>Re-entry points, context anchors, and a closing summary so you never lose your place mid-session.</p>
+        </div>
+        <div class="feat rise">
+          <div class="ico" aria-hidden="true">⌘</div>
+          <h3>Built for every domain</h3>
+          <p>Seven areas of life, each with its own protocol — not one generic voice stretched across all of them.</p>
+        </div>
+        <div class="feat rise">
+          <div class="ico" aria-hidden="true">✚</div>
+          <h3>Escalation built in</h3>
+          <p>If signals cross into crisis territory it stops everything and surfaces real help, immediately.</p>
+        </div>
+      </div>
+
+      <h3 style="margin-top:44px">The 8 states it recognises</h3>
+      <p class="measure" style="color:var(--text-soft);margin-bottom:0">
+        Detection drives the response — the same question gets a different shape depending on where you are.
+      </p>
+      <div class="states">
+        <span class="state"><em>01</em> Executive dysfunction</span>
+        <span class="state"><em>02</em> Shame spiral</span>
+        <span class="state"><em>03</em> Cognitive overload</span>
+        <span class="state"><em>04</em> Depletion</span>
+        <span class="state"><em>05</em> Frustration</span>
+        <span class="state"><em>06</em> Flow</span>
+        <span class="state"><em>07</em> Existential</span>
+        <span class="state"><em>08</em> Mixed states</span>
+      </div>
+
+      <h3 style="margin-top:40px">The 7 domains it covers</h3>
+      <div class="doms">
+        <span class="dom">Business</span>
+        <span class="dom">Tech</span>
+        <span class="dom">High-stakes personal advocacy</span>
+        <span class="dom">Learning &amp; study</span>
+        <span class="dom">Personal &amp; family</span>
+        <span class="dom">Wellness</span>
+        <span class="dom">Spiritual life</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= INCLUDED ================= -->
+  <section class="sec-alt">
+    <div class="wrap">
+      <p class="eyebrow">What's in your download</p>
+      <h2>Four files. One&nbsp;toolkit.</h2>
+
+      <ul class="inc measure" style="--measure:72ch">
+        <li>
+          <span class="chk" aria-hidden="true">✓</span>
+          <span><b>neurodivergent-navigator-core.skill</b>
+          <span>Installs directly into Claude — upload once and it's active.</span></span>
+        </li>
+        <li>
+          <span class="chk" aria-hidden="true">✓</span>
+          <span><b>Install &amp; Usage Guide</b>
+          <span>Step-by-step setup, the emotional-state reference, and a plain list of what Claude won't do.</span></span>
+        </li>
+        <li>
+          <span class="chk" aria-hidden="true">✓</span>
+          <span><b>Prompt Library — 14 prompts</b>
+          <span>Including the one-time onboarding prompt, session management, and crisis-aware prompts.</span></span>
+        </li>
+        <li>
+          <span class="chk" aria-hidden="true">✓</span>
+          <span><b>Universal AI Prompt</b>
+          <span>No Claude account? This works with ChatGPT, Gemini, and any AI chat tool.</span></span>
+        </li>
+      </ul>
+
+      <h3 style="margin-top:44px">Installing takes 4 steps</h3>
+      <ol class="steps">
+        <li><p>Log into <strong>claude.ai</strong></p></li>
+        <li><p>Settings → Skills → Install Skill</p></li>
+        <li><p>Upload the <strong>.skill</strong> file</p></li>
+        <li><p>New chat → run the onboarding prompt once</p></li>
+      </ol>
+      <p style="margin-top:18px;color:var(--text-soft)">Under 10 minutes. Works immediately.</p>
+    </div>
+  </section>
+
+  <!-- ================= FIT ================= -->
+  <section>
+    <div class="wrap">
+      <p class="eyebrow">Honest fit check</p>
+      <h2>Worth $47 to you — or not. Both are fine.</h2>
+
+      <div class="fit" style="margin-top:24px">
+        <div class="fit-col yes">
+          <h3>This is for you if</h3>
+          <ul>
+            <li><i aria-hidden="true">✓</i><span>You're an adult with ADHD, dyslexia, or both</span></li>
+            <li><i aria-hidden="true">✓</i><span>You're a neurodivergent entrepreneur or professional</span></li>
+            <li><i aria-hidden="true">✓</i><span>You've tried AI tools and felt they weren't built for your brain</span></li>
+          </ul>
+        </div>
+        <div class="fit-col no">
+          <h3>This is not for you if</h3>
+          <ul>
+            <li><i aria-hidden="true">✕</i><span>You have no Claude account — though the included Universal AI Prompt works with any AI</span></li>
+            <li><i aria-hidden="true">✕</i><span>You're looking for a medical or mental-health tool. This is not that.</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div id="policy" style="margin-top:26px">
+        <div class="note">
+          <b>Not a medical or mental-health tool.</b> Neurodivergent Navigator changes how an
+          AI assistant communicates. It does not diagnose, treat, or provide clinical care.
+          It does include crisis escalation: if signals cross into crisis territory it stops
+          and surfaces help — <b>988</b> (veterans: press 1), or text <b>HOME</b> to <b>741741</b> in the US.
+        </div>
+        <div class="note">
+          <b>Refund policy: all sales are final.</b> Because this is a digital download,
+          no refunds are offered. Please use the fit check above before buying.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= FINAL CTA ================= -->
+  <section class="sec-alt">
+    <div class="wrap">
+      <div class="final">
+        <p class="eyebrow">One decision left</p>
+        <h2 style="max-width:26ch">Stop translating your brain for your tools.</h2>
+        <p class="lede measure">
+          <span data-gumroad-field="name">Neurodivergent Navigator AI Skill for ADHD &amp; Dyslexic Minds</span>
+          — a one-time <span data-gumroad-field="price">$47</span>, downloaded instantly, working in under ten minutes.
+        </p>
+        <div class="cta-row" style="margin-top:22px">
+          <a class="btn" href="#" data-gumroad-action="buy">
+            Get the skill <span class="amt" data-gumroad-field="price">$47</span>
+          </a>
+        </div>
+        <p class="cta-note">
+          Instant download · 16.3&nbsp;KB · all sales final ·
+          questions? <a href="mailto:getwireddifferently@gmail.com">getwireddifferently@gmail.com</a>
+        </p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p><strong>Neurodivergent Navigator</strong> — built for ADHD &amp; dyslexic minds.</p>
+    <p>Not a medical or mental-health tool. In a crisis in the US: call or text <strong>988</strong> (veterans press 1), or text <strong>HOME</strong> to <strong>741741</strong>.</p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ---- theme toggle: auto → light → dark, persisted when allowed ---- */
+  var root = document.documentElement,
+      btn  = document.getElementById("theme"),
+      ico  = document.getElementById("theme-ico"),
+      txt  = document.getElementById("theme-txt"),
+      order = ["auto", "light", "dark"],
+      label = { auto: "Auto", light: "Light", dark: "Dark" },
+      icon  = { auto: "◐", light: "☀", dark: "☾" };
+
+  function store(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+  function load(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+
+  function apply(mode) {
+    root.setAttribute("data-theme", mode);
+    if (ico) ico.textContent = icon[mode];
+    if (txt) txt.textContent = label[mode];
+    if (btn) btn.setAttribute("aria-label", "Colour theme: " + label[mode] + ". Click to change.");
+  }
+
+  var saved = load("nn-theme");
+  apply(order.indexOf(saved) > -1 ? saved : "auto");
+
+  if (btn) {
+    btn.addEventListener("click", function () {
+      var next = order[(order.indexOf(root.getAttribute("data-theme")) + 1) % order.length];
+      apply(next);
+      store("nn-theme", next);
+    });
+  }
+
+  /* ---- scroll reveal, skipped entirely when reduced motion is preferred ---- */
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+      items  = document.querySelectorAll(".rise");
+
+  if (reduce || !("IntersectionObserver" in window)) {
+    for (var i = 0; i < items.length; i++) items[i].classList.add("in");
+  } else {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
+      });
+    }, { rootMargin: "0px 0px -8% 0px", threshold: 0.1 });
+    for (var j = 0; j < items.length; j++) io.observe(items[j]);
+  }
+})();
+</script>
+
+</body>
+</html>
