@@ -364,7 +364,7 @@
         <h1>AI that leads with the&nbsp;answer.</h1>
         <p class="sub">A Claude skill for ADHD and dyslexic minds. That's not a you problem. It's a tool problem.</p>
         <p style="margin:var(--sc-5) 0 0">
-          <a class="btn" data-buy href="#">Get the skill <span class="amt">$47</span></a>
+          <a class="btn" data-buy href="https://getwireddifferently.gumroad.com/l/neurodivergent-navigator">Get the skill <span class="amt">$47</span></a>
         </p>
         <p class="cta-note">One time. Instant download. Installs in under 10 minutes.</p>
       </div>
@@ -528,7 +528,7 @@
               Neurodivergent Navigator. A one-time $47, downloaded instantly, working in under ten minutes.
             </p>
             <p style="margin:var(--sc-5) 0 0" data-sc-cue="0.10">
-              <a class="btn" data-buy href="#">Get the skill <span class="amt">$47</span></a>
+              <a class="btn" data-buy href="https://getwireddifferently.gumroad.com/l/neurodivergent-navigator">Get the skill <span class="amt">$47</span></a>
             </p>
             <p class="cta-note" data-sc-cue="0.13">
               Instant download &middot; 16.3&nbsp;KB &middot; all sales final &middot;
@@ -574,27 +574,10 @@
 (function () {
   "use strict";
 
-  /* ------------------------------------------------------------------
-     THE ONE LINE TO EDIT.
-     Paste the Gumroad product URL here and both buy buttons point at it.
-     Until then they are marked unavailable rather than silently dead,
-     which is what href="#" was doing before.
-     ------------------------------------------------------------------ */
-  var BUY_URL = "https://getwireddifferently.gumroad.com/l/neurodivergent-navigator";
-
-  var buys = document.querySelectorAll("[data-buy]");
-  for (var b = 0; b < buys.length; b++) {
-    if (BUY_URL) {
-      buys[b].setAttribute("href", BUY_URL);
-    } else {
-      /* no href at all, so it is not focusable and not clickable, rather than
-         a link that swallows the click and goes nowhere. */
-      buys[b].removeAttribute("href");
-      buys[b].setAttribute("role", "button");
-      buys[b].setAttribute("aria-disabled", "true");
-      buys[b].setAttribute("title", "Checkout link not configured yet");
-    }
-  }
+  /* The buy links are plain hrefs in the markup, on purpose. A checkout
+     button that needs JavaScript to become a link is how the previous
+     version of this page shipped dead for months. To change the product
+     URL, edit the two href values directly. */
 
   /* ---- theme: auto to light to dark, persisted when allowed ---- */
   var root = document.documentElement,
