@@ -1,750 +1,703 @@
 <!doctype html>
 <html lang="en" data-theme="auto">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta name="google-site-verification" content="cNGEmZ4jnkrT-4FlYYTGD55YH5I7Ql6WmMNK57wyxN4" />
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Neurodivergent Navigator — AI that leads with the answer</title>
+<meta name="description" content="A Claude skill for ADHD and dyslexic minds. The answer comes first, one question maximum, and it reads where you are before it responds.">
+<meta name="google-site-verification" content="cNGEmZ4jnkrT-4FlYYTGD55YH5I7Ql6WmMNK57wyxN4" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%230d6560'/><text x='16' y='23' font-size='19' font-family='system-ui' font-weight='700' fill='%23faf7f2' text-anchor='middle'>N</text></svg>">
+<link rel="stylesheet" href="sc/scrollcraft.css">
 <style>
   /* ============================================================
-     Neurodivergent Navigator — landing page
-     Design rule: the page must obey the product's own principles.
-     Bottom line first. No walls of text. Low visual stress.
-     Dyslexia-friendly: generous line-height, left-aligned always,
-     never justified, capped line length, no pure-black-on-white.
+     Neurodivergent Navigator.
+     Grammar: split stage. Two columns held in tension the whole
+     way down, resolved once at the end.
+
+     The page obeys the product's own rules. Answer first. No wall
+     of text on the side that is selling. Low visual stress, capped
+     measure, no glare, nothing that moves without a reason.
      ============================================================ */
 
   :root {
-    --bg:        #faf7f2;   /* warm off-white, not #fff — less glare */
-    --bg-alt:    #f3eee6;
-    --surface:   #fffdfa;
-    --border:    #e2dace;
-    --text:      #23201c;   /* deep warm charcoal, not pure black */
-    --text-soft: #574f45;
-    --text-mute: #6d6459;
-    --accent:    #0d6560;
-    --accent-lo: #e3f1ef;
-    --accent-tx: #0b4f4b;
-    --warn:      #8a5a12;
-    --warn-lo:   #fbf1de;
-    --btn-bg:    #0d6560;
-    --btn-tx:    #ffffff;
-    --shadow:    0 1px 2px rgba(35,32,28,.05), 0 8px 24px -12px rgba(35,32,28,.16);
-    --radius:    14px;
-    --maxw:      1080px;
-    --measure:   64ch;  /* capped line length aids tracking */
+    --sc-canvas:     #faf7f2;
+    --sc-surface:    #fffdfa;
+    --sc-ink:        #23201c;
+    --sc-ink-soft:   #574f45;
+    --sc-accent:     #0d6560;
+    --sc-accent-ink: #ffffff;
+
+    /* one family. accessibility is the brief, so the neutral system
+       stack is the right call and it costs no download and no reflow. */
+    --sc-font-display: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --sc-font-text:    ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+    /* two grounds, one per column, and they hold. the generic side
+       is a step colder. that is the argument, in a colour. */
+    --ground-generic: #efedea;
+    --ground-nav:     #faf7f2;
+    --edge:           #e2dace;
+    --edge-generic:   #dcd9d4;
+    --ink-mute:       #6d6459;
+    --measure:        62ch;
+    --collapse:       0;
+  }
+
+  :root[data-theme="dark"],
+  :root:not([data-theme="light"]) {
+    color-scheme: light;
   }
 
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
-      --bg:        #171512;
-      --bg-alt:    #1e1b17;
-      --surface:   #211e1a;
-      --border:    #363029;
-      --text:      #f2ede5;
-      --text-soft: #cdc4b8;
-      --text-mute: #a89e92;
-      --accent:    #5eead4;
-      --accent-lo: #16302e;
-      --accent-tx: #7ff0dc;
-      --warn:      #e8bd7a;
-      --warn-lo:   #2e2517;
-      --btn-bg:    #5eead4;
-      --btn-tx:    #10302c;
-      --shadow:    0 1px 2px rgba(0,0,0,.4), 0 10px 30px -12px rgba(0,0,0,.6);
+      --sc-canvas:     #171512;
+      --sc-surface:    #211e1a;
+      --sc-ink:        #f2ede5;
+      --sc-ink-soft:   #cdc4b8;
+      --sc-accent:     #5ec9bf;
+      --sc-accent-ink: #10201e;
+      --ground-generic:#131211;
+      --ground-nav:    #1c1916;
+      --edge:          #363029;
+      --edge-generic:  #2b2724;
+      --ink-mute:      #a79c8e;
+      color-scheme: dark;
     }
   }
-  /* Manual toggle must beat the media query in both directions */
   :root[data-theme="dark"] {
-    --bg:#171512; --bg-alt:#1e1b17; --surface:#211e1a; --border:#363029;
-    --text:#f2ede5; --text-soft:#cdc4b8; --text-mute:#a89e92;
-    --accent:#5eead4; --accent-lo:#16302e; --accent-tx:#7ff0dc;
-    --warn:#e8bd7a; --warn-lo:#2e2517;
-    --btn-bg:#5eead4; --btn-tx:#10302c;
-    --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 30px -12px rgba(0,0,0,.6);
+    --sc-canvas:     #171512;
+    --sc-surface:    #211e1a;
+    --sc-ink:        #f2ede5;
+    --sc-ink-soft:   #cdc4b8;
+    --sc-accent:     #5ec9bf;
+    --sc-accent-ink: #10201e;
+    --ground-generic:#131211;
+    --ground-nav:    #1c1916;
+    --edge:          #363029;
+    --edge-generic:  #2b2724;
+    --ink-mute:      #a79c8e;
+    color-scheme: dark;
   }
-  :root[data-theme="light"] {
-    --bg:#faf7f2; --bg-alt:#f3eee6; --surface:#fffdfa; --border:#e2dace;
-    --text:#23201c; --text-soft:#574f45; --text-mute:#6d6459;
-    --accent:#0d6560; --accent-lo:#e3f1ef; --accent-tx:#0b4f4b;
-    --warn:#8a5a12; --warn-lo:#fbf1de;
-    --btn-bg:#0d6560; --btn-tx:#ffffff;
-  }
+  :root[data-theme="light"] { color-scheme: light; }
 
-  * { box-sizing: border-box; }
-
-  html { -webkit-text-size-adjust: 100%; }
-
-  body {
-    margin: 0;
-    background: var(--bg);
-    color: var(--text);
-    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
-                 "Helvetica Neue", Arial, sans-serif;
-    font-size: 17px;
-    line-height: 1.7;            /* generous leading */
-    letter-spacing: .01em;       /* slight tracking aids dyslexic reading */
-    text-align: left;            /* never justify */
-    -webkit-font-smoothing: antialiased;
-  }
-
-  .wrap { width: 100%; max-width: var(--maxw); margin: 0 auto; padding: 0 22px; }
-  .measure { max-width: var(--measure); }
-
-  h1, h2, h3 { line-height: 1.22; letter-spacing: -.015em; margin: 0 0 .5em; text-wrap: balance; }
-  h1 { font-size: clamp(2rem, 5.2vw, 3.15rem); font-weight: 800; }
-  h2 { font-size: clamp(1.45rem, 3.2vw, 2.05rem); font-weight: 750; }
-  h3 { font-size: 1.06rem; font-weight: 700; }
-  p  { margin: 0 0 1.05em; }
-  strong { font-weight: 700; }
-
-  a { color: var(--accent-tx); }
-
-  /* Visible focus for keyboard users — non-negotiable here */
-  :focus-visible {
-    outline: 3px solid var(--accent);
-    outline-offset: 3px;
-    border-radius: 6px;
-  }
+  body { background: var(--sc-canvas); color: var(--sc-ink); }
 
   .skip {
-    position: absolute; left: -9999px; top: 0;
-    background: var(--surface); color: var(--text);
-    padding: 12px 18px; z-index: 100; border-radius: 0 0 10px 0;
-    font-weight: 700; box-shadow: var(--shadow);
+    position: absolute; left: -9999px; top: 0; z-index: 100;
+    background: var(--sc-accent); color: var(--sc-accent-ink);
+    padding: .7rem 1.1rem; border-radius: 0 0 8px 0; font-weight: 600;
   }
   .skip:focus { left: 0; }
 
-  /* ---------- header ---------- */
-  header.bar {
-    position: sticky; top: 0; z-index: 40;
-    background: color-mix(in srgb, var(--bg) 88%, transparent);
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid var(--border);
+  /* ---------------------------------------------- the divider ---- */
+  /* This grammar has no top bar. The divider IS the chrome: it
+     carries both column labels, the progress of the argument, and
+     the gauge. */
+
+  .divider {
+    position: fixed; inset-block: 0; left: 50%; width: 1px; z-index: 40;
+    background: var(--edge);
+    transform: translateX(calc(var(--collapse) * -50vw));
+    opacity: calc(1 - var(--collapse));
+    pointer-events: none;
   }
-  .bar-in { display: flex; align-items: center; gap: 14px; padding: 11px 0; }
-  .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; letter-spacing: -.02em; }
-  .mark {
-    width: 30px; height: 30px; border-radius: 9px; flex: none;
-    background: var(--accent-lo);
-    border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
-    display: grid; place-items: center;
-    color: var(--accent-tx); font-weight: 900; font-size: .92rem;
+  .divider__labels {
+    position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+    display: flex; gap: 0; width: min(92vw, var(--sc-maxw, 1180px));
+    padding-top: .9rem; pointer-events: none;
   }
-  .bar-sp { margin-left: auto; }
-
-  .tbtn {
-    font: inherit; font-size: .85rem; font-weight: 650;
-    color: var(--text-soft);
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 999px; padding: 7px 15px; cursor: pointer;
-    display: inline-flex; align-items: center; justify-content: center; gap: 7px;
-    min-height: 44px;  /* WCAG 2.5.8 tap target */
+  .divider__label {
+    flex: 1 1 50%; font-size: .78rem; letter-spacing: .06em;
+    text-transform: uppercase; color: var(--ink-mute);
+    background: color-mix(in srgb, var(--sc-canvas) 88%, transparent);
+    backdrop-filter: blur(6px);
+    padding: .5rem .9rem; border-radius: 999px;
   }
-  .tbtn:hover { color: var(--text); border-color: var(--accent); }
+  .divider__label--l { text-align: right; margin-right: .55rem; }
+  .divider__label--r { text-align: left;  margin-left: .55rem; color: var(--sc-accent); font-weight: 600; }
 
-  /* ---------- buttons ---------- */
-  .btn {
-    display: inline-flex; align-items: center; justify-content: center; gap: 10px;
-    background: var(--btn-bg); color: var(--btn-tx);
-    font: inherit; font-weight: 750; font-size: 1.02rem;
-    padding: 15px 27px; border: 0; border-radius: 12px;
-    cursor: pointer; text-decoration: none;
-    box-shadow: var(--shadow);
-    transition: transform .16s ease, filter .16s ease;
+  /* the gauge. the signature move.
+     two markers riding the divider, each showing how far down its
+     own column the actual answer sits. measured off the real DOM. */
+  /* it belongs to the argument, so it arrives with the two answers and
+     leaves fast once the collapse starts. */
+  .gauge {
+    position: absolute; inset-block: 22vh 22vh; left: 50%; width: 0;
+    opacity: calc(var(--gauge-op, 0) * (1 - min(1, var(--collapse) * 3)));
+    transition: opacity 320ms linear;
   }
-  .btn:hover { filter: brightness(1.07); transform: translateY(-1px); }
-  .btn:active { transform: translateY(0); }
-  .btn .amt { opacity: .82; font-weight: 650; }
-
-  .btn-ghost {
-    display: inline-flex; align-items: center; gap: 8px;
-    color: var(--text-soft); text-decoration: none; font-weight: 650;
-    padding: 15px 20px; border-radius: 12px; border: 1px solid var(--border);
-    background: transparent;
+  .gauge__track {
+    position: absolute; inset-block: 0; left: -1px; width: 3px;
+    background: linear-gradient(to bottom, transparent, var(--edge) 12%, var(--edge) 88%, transparent);
+    border-radius: 2px;
   }
-  .btn-ghost:hover { color: var(--text); border-color: var(--accent); }
-
-  .cta-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
-  .cta-note { font-size: .87rem; color: var(--text-mute); margin: 12px 0 0; }
-
-  /* ---------- sections ---------- */
-  section { padding: clamp(48px, 8vw, 84px) 0; }
-  .sec-alt { background: var(--bg-alt); border-block: 1px solid var(--border); }
-  .eyebrow {
-    text-transform: uppercase; letter-spacing: .13em; font-size: .74rem;
-    font-weight: 800; color: var(--accent-tx); margin: 0 0 12px;
+  .gauge__mark {
+    position: absolute; left: 50%; width: 10px; height: 10px; margin-left: -5px; margin-top: -5px;
+    border-radius: 50%; top: var(--at, 0%);
+    transition: top 420ms var(--sc-ease-out, cubic-bezier(.23,1,.32,1));
   }
-  .lede { font-size: 1.1rem; color: var(--text-soft); }
-
-  /* ---------- hero ---------- */
-  .hero { padding-top: clamp(38px, 6vw, 62px); }
-  .hero-grid { display: grid; gap: clamp(30px, 5vw, 52px); grid-template-columns: 1fr; align-items: start; }
-  @media (min-width: 900px) { .hero-grid { grid-template-columns: 1.08fr .92fr; } }
-
-  .pill {
-    display: inline-flex; align-items: center; gap: 8px;
-    background: var(--accent-lo); color: var(--accent-tx);
-    border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
-    border-radius: 999px; padding: 6px 14px;
-    font-size: .8rem; font-weight: 700; margin-bottom: 18px;
+  .gauge__mark--l { background: var(--ink-mute); }
+  .gauge__mark--r { background: var(--sc-accent); box-shadow: 0 0 0 4px color-mix(in srgb, var(--sc-accent) 18%, transparent); }
+  /* both captions sit left of the divider, on a chip, so they stay legible
+     over whatever the column underneath happens to be showing. */
+  .gauge__cap {
+    position: absolute; right: 13px; top: var(--at, 0%); transform: translateY(-50%);
+    font-size: .7rem; letter-spacing: .03em; color: var(--ink-mute); white-space: nowrap;
+    text-align: right; padding: .12rem .45rem; border-radius: 999px;
+    background: color-mix(in srgb, var(--sc-canvas) 90%, transparent);
+    transition: top 420ms var(--sc-ease-out, cubic-bezier(.23,1,.32,1));
   }
-  .kicker { font-size: 1.14rem; color: var(--text-soft); }
-  .kicker b { color: var(--text); }
-
-  .price-line { display: flex; align-items: baseline; gap: 10px; margin: 4px 0 20px; flex-wrap: wrap; }
-  .price-big { font-size: 2.1rem; font-weight: 800; letter-spacing: -.03em; }
-  .price-sub { color: var(--text-mute); font-size: .92rem; }
-
-  figure.shot { margin: 0; }
-  figure.shot img {
-    display: block; width: 100%; height: auto;
-    border-radius: var(--radius); border: 1px solid var(--border);
-    box-shadow: var(--shadow); background: var(--surface);
-  }
-  figure.shot figcaption { font-size: .82rem; color: var(--text-mute); margin-top: 10px; }
-
-  /* facts strip — factual, not fabricated proof */
-  .facts {
-    display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px;
-    background: var(--border); border: 1px solid var(--border);
-    border-radius: var(--radius); overflow: hidden; margin-top: 28px;
-  }
-  @media (min-width: 620px) { .facts { grid-template-columns: repeat(4, 1fr); } }
-  .fact { background: var(--surface); padding: 16px 15px; }
-  .fact b { display: block; font-size: 1.42rem; font-weight: 800; letter-spacing: -.02em; }
-  .fact span { font-size: .79rem; color: var(--text-mute); line-height: 1.45; display: block; }
-
-  /* ---------- the demo (conversion centrepiece) ---------- */
-  .demo { display: grid; gap: 18px; grid-template-columns: 1fr; margin-top: 26px; }
-  @media (min-width: 860px) { .demo { grid-template-columns: 1fr 1fr; gap: 20px; } }
-
-  .card {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: var(--radius); padding: 22px; box-shadow: var(--shadow);
-  }
-  .card-head { display: flex; align-items: center; gap: 9px; margin-bottom: 14px; flex-wrap: wrap; }
-  .tag {
-    font-size: .71rem; font-weight: 800; text-transform: uppercase; letter-spacing: .09em;
-    padding: 4px 9px; border-radius: 6px;
-  }
-  .tag-bad  { background: var(--warn-lo); color: var(--warn); }
-  .tag-good { background: var(--accent-lo); color: var(--accent-tx); }
-
-  .chat { font-size: .93rem; line-height: 1.68; color: var(--text-soft); }
-  .chat .you {
-    display: block; color: var(--text); font-weight: 700;
-    padding: 11px 13px; background: var(--bg-alt);
-    border-radius: 10px; margin-bottom: 14px; font-size: .92rem;
-  }
-  .wall { max-height: 190px; overflow: hidden; position: relative; }
-  .wall::after {
-    content: ""; position: absolute; inset: auto 0 0 0; height: 76px;
-    background: linear-gradient(to bottom, transparent, var(--surface));
-  }
-  .wall p { margin-bottom: .7em; }
-  .qmark { color: var(--warn); font-weight: 700; }
-
-  /* The payoff of the demo — a filled panel carries more weight than a
-     side rule, and reads as "here is the answer" rather than "here is a quote". */
-  .answer-first {
-    font-size: 1.04rem; font-weight: 750; color: var(--text);
-    background: var(--accent-lo); border-radius: 10px;
-    padding: 13px 15px; margin-bottom: 14px;
-  }
-  .detect {
-    font-size: .8rem; color: var(--accent-tx); background: var(--accent-lo);
-    display: inline-block; padding: 5px 11px; border-radius: 7px;
-    font-weight: 700; margin-bottom: 12px;
-  }
-  .one-q { color: var(--text); font-weight: 650; }
-
-  /* ---------- generic grids ---------- */
-  .grid { display: grid; gap: 16px; grid-template-columns: 1fr; }
-  @media (min-width: 640px) { .grid-2 { grid-template-columns: 1fr 1fr; } }
-  @media (min-width: 760px) { .grid-3 { grid-template-columns: repeat(3, 1fr); } }
-  @media (min-width: 880px) { .grid-4 { grid-template-columns: repeat(4, 1fr); } }
-
-  .feat { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; }
-  .feat h3 { margin-bottom: 6px; }
-  .feat p { margin: 0; font-size: .93rem; color: var(--text-soft); }
-  .ico {
-    width: 34px; height: 34px; border-radius: 9px; margin-bottom: 12px;
-    background: var(--accent-lo); color: var(--accent-tx);
-    display: grid; place-items: center; font-size: 1.05rem;
-  }
-
-  /* states */
-  .states { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
-  .state {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: 999px; padding: 9px 16px; font-size: .9rem; font-weight: 650;
-  }
-  .state em { font-style: normal; color: var(--accent-tx); }
-
-  /* domains */
-  .doms { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 20px; }
-  .dom {
-    border: 1px dashed var(--border); border-radius: 10px;
-    padding: 8px 14px; font-size: .89rem; color: var(--text-soft); background: var(--surface);
-  }
-
-  /* included list */
-  ul.inc { list-style: none; padding: 0; margin: 22px 0 0; display: grid; gap: 12px; }
-  ul.inc li {
-    display: flex; gap: 13px; align-items: flex-start;
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: 12px; padding: 16px 18px;
-  }
-  ul.inc .chk {
-    flex: none; width: 22px; height: 22px; border-radius: 50%;
-    background: var(--accent-lo); color: var(--accent-tx);
-    display: grid; place-items: center; font-size: .76rem; font-weight: 900; margin-top: 2px;
-  }
-  ul.inc b { display: block; }
-  ul.inc span { font-size: .9rem; color: var(--text-soft); }
-
-  /* steps */
-  ol.steps { list-style: none; counter-reset: s; padding: 0; margin: 24px 0 0; display: grid; gap: 14px; }
-  @media (min-width: 760px) { ol.steps { grid-template-columns: repeat(4, 1fr); } }
-  ol.steps li { counter-increment: s; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 18px; }
-  ol.steps li::before {
-    content: counter(s); display: grid; place-items: center;
-    width: 28px; height: 28px; border-radius: 8px;
-    background: var(--accent); color: var(--btn-tx);
-    font-weight: 800; font-size: .88rem; margin-bottom: 11px;
-  }
-  :root[data-theme="dark"] ol.steps li::before,
-  :root:not([data-theme="light"]) ol.steps li::before { color: #10302c; }
-  ol.steps p { margin: 0; font-size: .92rem; color: var(--text-soft); }
-
-  /* fit / not fit */
-  .fit { display: grid; gap: 18px; grid-template-columns: 1fr; }
-  @media (min-width: 780px) { .fit { grid-template-columns: 1fr 1fr; } }
-  .fit-col { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 22px; }
-  .fit-col ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 11px; }
-  .fit-col li { display: flex; gap: 11px; font-size: .94rem; color: var(--text-soft); }
-  .fit-col li i { font-style: normal; flex: none; font-weight: 800; }
-  .yes i { color: var(--accent-tx); }
-  .no  i { color: var(--warn); }
-
-  /* honesty / policy block */
-  /* Honest disclosures earn a tinted field of their own rather than a
-     side rule — the whole block reads as "read this", not just its edge. */
-  .note {
-    border: 1px solid color-mix(in srgb, var(--warn) 32%, var(--border));
-    background: var(--warn-lo); border-radius: 12px; padding: 18px 20px;
-    font-size: .92rem; color: var(--text-soft);
-  }
-  .note b { color: var(--text); }
-  .note + .note { margin-top: 14px; }
-
-  /* final cta */
-  .final {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: 20px; padding: clamp(28px, 5vw, 48px);
-    box-shadow: var(--shadow); text-align: left;
-  }
-
-  footer { border-top: 1px solid var(--border); padding: 30px 0 42px; color: var(--text-mute); font-size: .87rem; }
-  footer p { margin: 0 0 .5em; }
-
-  /* ---------- newsletter ---------- */
-  .signup { background: var(--bg-alt); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px 26px; }
-  .signup p { margin: 0 0 .9em; font-size: .98rem; color: var(--text-soft); }
-  .signup strong { color: var(--text); }
-  .signup-row { display: flex; flex-wrap: wrap; gap: 10px; }
-  .signup input[type=email] { flex: 1 1 240px; min-width: 0; font: inherit; font-size: 1rem; padding: 12px 14px; border-radius: 10px; border: 1px solid var(--border); background: var(--surface); color: var(--text); }
-  .signup button { font: inherit; font-weight: 700; font-size: 1rem; padding: 12px 22px; border: 0; border-radius: 10px; background: var(--btn-bg); color: var(--btn-tx); cursor: pointer; }
-
-  /* ---------- motion, gated on user preference ---------- */
-  .rise { opacity: 0; transform: translateY(14px); transition: opacity .55s ease, transform .55s ease; }
-  .rise.in { opacity: 1; transform: none; }
 
   @media (prefers-reduced-motion: reduce) {
-    * { animation-duration: .001ms !important; animation-iteration-count: 1 !important;
-        transition-duration: .001ms !important; scroll-behavior: auto !important; }
-    .rise { opacity: 1 !important; transform: none !important; }
+    .gauge__mark, .gauge__cap { transition: none; }
+  }
+
+  /* ------------------------------------------------ the pair ----- */
+  .pair {
+    display: grid; grid-template-columns: 1fr 1fr;
+    width: min(92vw, var(--sc-maxw, 1180px)); margin-inline: auto;
+    align-items: stretch;
+  }
+  .side { padding: var(--sc-6) clamp(1rem, 2.4vw, 2rem) var(--sc-7); }
+  .side--generic { background: var(--ground-generic); border-right: 1px solid var(--edge); }
+  .side--nav     { background: var(--ground-nav); }
+
+  .side h2, .side h3 { text-wrap: balance; }
+  .side p { max-width: var(--measure); text-wrap: pretty; }
+
+  .q {
+    width: min(92vw, var(--sc-maxw, 1180px)); margin: 0 auto var(--sc-4);
+    padding: var(--sc-4) clamp(1rem, 2.4vw, 2rem) 0;
+  }
+  .q b { display: block; font-size: clamp(1.05rem, 2.2vw, 1.35rem); font-weight: 600; line-height: 1.5; }
+  .q span { display: block; font-size: .8rem; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-mute); margin-bottom: .5rem; }
+
+  /* ------------------------------------------------- the hero ---- */
+  .hero { padding-top: clamp(4.5rem, 9vh, 7rem); }
+  .hero h1 {
+    font-size: var(--sc-t-3xl); line-height: 1.06; letter-spacing: var(--sc-track-tight);
+    margin: 0 0 var(--sc-3);
+  }
+  .hero .sub { color: var(--sc-ink-soft); font-size: var(--sc-t-lg); line-height: 1.55; margin: 0; }
+  .hero .side--generic h1 { color: var(--ink-mute); }
+
+  /* ------------------------------------------------ the chat ----- */
+  .said {
+    display: block; font-size: .95rem; color: var(--sc-ink-soft);
+    border-left: 1px solid var(--edge); padding: .25rem 0 .25rem .9rem; margin-bottom: var(--sc-4);
+  }
+  .wall p {
+    font-size: .95rem; line-height: 1.62; color: var(--sc-ink-soft); margin: 0 0 .85rem;
+  }
+  .wall p:last-child { margin-bottom: 0; }
+  .followups { margin-top: var(--sc-4); font-size: .92rem; color: var(--ink-mute); font-style: italic; }
+
+  .answer-first {
+    font-size: clamp(1.15rem, 2.4vw, 1.5rem); font-weight: 600; line-height: 1.42;
+    margin: 0 0 var(--sc-3); color: var(--sc-ink);
+  }
+  .detect {
+    display: inline-block; font-size: .78rem; letter-spacing: .05em; text-transform: uppercase;
+    color: var(--sc-accent); border: 1px solid color-mix(in srgb, var(--sc-accent) 34%, transparent);
+    border-radius: 999px; padding: .3rem .7rem; margin-bottom: var(--sc-3);
+  }
+  .side--nav .body { color: var(--sc-ink-soft); font-size: .98rem; line-height: 1.62; }
+  .one-q { font-weight: 600; margin-top: var(--sc-3); }
+
+  /* ------------------------------------------------ the count ---- */
+  .tally { display: flex; flex-direction: column; gap: .35rem; }
+  .tally b { font-size: var(--sc-t-3xl); line-height: 1; font-variant-numeric: tabular-nums; letter-spacing: -.02em; }
+  .tally .unit { font-size: .95rem; color: var(--ink-mute); }
+  .side--nav .tally b { color: var(--sc-accent); }
+
+  /* ------------------------------------------------- lists ------- */
+  .plain { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--sc-3); }
+  .plain li { display: grid; grid-template-columns: 1.1rem 1fr; gap: .7rem; align-items: start; }
+  .plain i { font-style: normal; color: var(--sc-accent); line-height: 1.5; }
+  .plain .no i { color: var(--ink-mute); }
+  .plain b { display: block; font-weight: 600; }
+  .plain span span { display: block; color: var(--sc-ink-soft); font-size: .94rem; line-height: 1.6; margin-top: .15rem; }
+
+  .chips { display: flex; flex-wrap: wrap; gap: .45rem; margin: 0; padding: 0; list-style: none; }
+  .chips li {
+    font-size: .88rem; padding: .38rem .7rem; border: 1px solid var(--edge);
+    border-radius: 999px; color: var(--sc-ink-soft);
+  }
+
+  .steps { counter-reset: s; list-style: none; margin: 0; padding: 0; display: grid; gap: var(--sc-2); }
+  .steps li { counter-increment: s; display: grid; grid-template-columns: 1.6rem 1fr; gap: .7rem; align-items: baseline; }
+  .steps li::before {
+    content: counter(s); font-variant-numeric: tabular-nums; font-weight: 600;
+    color: var(--sc-accent); font-size: .92rem;
+  }
+
+  /* ------------------------------------------------ controls ----- */
+  .btn, .tbtn, .signup button {
+    font: inherit; cursor: pointer; border-radius: 10px;
+    transition: transform 140ms var(--sc-ease-out, cubic-bezier(.23,1,.32,1)),
+                background-color 140ms linear, border-color 140ms linear;
+  }
+  .btn {
+    display: inline-flex; align-items: center; gap: .5rem; white-space: nowrap;
+    background: var(--sc-accent); color: var(--sc-accent-ink); border: 1px solid transparent;
+    padding: .85rem 1.3rem; font-weight: 600; text-decoration: none;
+  }
+  .btn:hover { background: color-mix(in srgb, var(--sc-accent) 88%, #000); }
+  .btn:active { transform: translateY(1px); }
+  .btn .amt { font-variant-numeric: tabular-nums; opacity: .92; }
+  .cta-note { font-size: .88rem; color: var(--ink-mute); margin-top: var(--sc-3); }
+  .cta-note a { color: inherit; }
+
+  .tbtn {
+    position: fixed; top: .85rem; right: .9rem; z-index: 50;
+    background: color-mix(in srgb, var(--sc-canvas) 86%, transparent);
+    backdrop-filter: blur(6px);
+    color: var(--sc-ink-soft); border: 1px solid var(--edge);
+    padding: .45rem .7rem; font-size: .82rem; display: inline-flex; gap: .4rem; align-items: center;
+  }
+  .tbtn:hover { color: var(--sc-ink); border-color: var(--sc-ink-soft); }
+
+  a { color: var(--sc-accent); text-underline-offset: .18em; text-decoration-thickness: 1px; }
+  :focus-visible { outline: 2px solid var(--sc-accent); outline-offset: 3px; border-radius: 4px; }
+
+  /* ------------------------------------------------ the close ---- */
+  /* the collapse. the generic column leaves, the answer column
+     takes the full width for the first and only time. */
+  /* the close holds a full screen rather than parking content at the top
+     and leaving two thirds of the stage empty for most of the act. */
+  .collapse [data-sc-stage] {
+    display: flex; flex-direction: column; justify-content: safe center;
+  }
+  .collapse .pair {
+    grid-template-columns: calc((1 - var(--sc-p, 0)) * 50%) 1fr;
+    transition: none;
+  }
+  .collapse .side--generic {
+    opacity: calc(1 - var(--sc-p, 0) * 1.35);
+    transform: translateX(calc(var(--sc-p, 0) * -14%));
+    overflow: hidden;
+  }
+  .collapse .side--nav { border-left: 0; }
+  .close-in { max-width: 46rem; }
+  .close-in h2 { font-size: var(--sc-t-3xl); line-height: 1.08; letter-spacing: var(--sc-track-tight); margin: 0 0 var(--sc-3); }
+  .close-in .lede { font-size: var(--sc-t-lg); color: var(--sc-ink-soft); line-height: 1.55; max-width: var(--measure); }
+
+  /* ------------------------------------------------- signup ------ */
+  .signup { border: 1px solid var(--edge); border-radius: 14px; padding: var(--sc-5); background: var(--sc-surface); }
+  .signup p { margin: 0 0 var(--sc-3); color: var(--sc-ink-soft); line-height: 1.6; max-width: var(--measure); }
+  .signup-row { display: flex; gap: .6rem; flex-wrap: wrap; }
+  .signup input[type=email] {
+    flex: 1 1 15rem; font: inherit; padding: .8rem .9rem; border-radius: 10px;
+    border: 1px solid var(--edge); background: var(--sc-canvas); color: var(--sc-ink);
+  }
+  .signup button { background: var(--sc-ink); color: var(--sc-canvas); border: 0; padding: .8rem 1.1rem; font-weight: 600; }
+
+  .foot { border-top: 1px solid var(--edge); margin-top: var(--sc-7); padding-top: var(--sc-5); }
+  .foot p { color: var(--sc-ink-soft); font-size: .93rem; line-height: 1.7; max-width: 78ch; margin: 0 0 var(--sc-3); }
+  .foot .crisis { color: var(--sc-ink); }
+
+  /* -------------------------------------------------- mobile ----- */
+  @media (max-width: 800px) {
+    .divider, .gauge { display: none; }
+    .pair { grid-template-columns: 1fr; }
+    .side--generic { border-right: 0; border-bottom: 1px solid var(--edge); }
+    .side { padding: var(--sc-5) 1.1rem; }
+    .side::before {
+      content: attr(data-label); display: block; font-size: .74rem; letter-spacing: .07em;
+      text-transform: uppercase; color: var(--ink-mute); margin-bottom: var(--sc-3);
+    }
+    .side--nav::before { color: var(--sc-accent); font-weight: 600; }
+    .hero h1 { font-size: var(--sc-t-2xl); }
+    .close-in h2 { font-size: var(--sc-t-2xl); }
+    .collapse .pair { grid-template-columns: 1fr; }
+    /* stacked, the collapse cannot take the noisy column away, so it would
+       sit between the reader and the close. It is decorative here. Drop it. */
+    .collapse .side--generic { display: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .collapse .pair { grid-template-columns: 0 1fr; }
+    .collapse .side--generic { display: none; }
+    .divider { transform: none; }
   }
 </style>
 </head>
 <body>
-
+<span data-sc-progress></span>
 <a class="skip" href="#main">Skip to main content</a>
 
-<header class="bar">
-  <div class="wrap bar-in">
-    <div class="brand">
-      <span class="mark" aria-hidden="true">N</span>
-      <span>Neurodivergent&nbsp;Navigator</span>
-    </div>
-    <div class="bar-sp"></div>
-    <button class="tbtn" id="theme" type="button" aria-live="polite">
-      <span aria-hidden="true" id="theme-ico">◐</span><span id="theme-txt">Theme</span>
-    </button>
+<button class="tbtn" id="theme" type="button" aria-live="polite">
+  <span aria-hidden="true" id="theme-ico">◐</span><span id="theme-txt">Theme</span>
+</button>
+
+<!-- The divider is the chrome. No top bar in this grammar. -->
+<div class="divider" aria-hidden="true">
+  <div class="gauge">
+    <div class="gauge__track"></div>
+    <div class="gauge__mark gauge__mark--l" id="mk-l"></div>
+    <div class="gauge__cap  gauge__cap--l"  id="cap-l"></div>
+    <div class="gauge__mark gauge__mark--r" id="mk-r"></div>
+    <div class="gauge__cap  gauge__cap--r"  id="cap-r"></div>
   </div>
-</header>
+</div>
+<div class="divider__labels" aria-hidden="true">
+  <span class="divider__label divider__label--l">Any AI</span>
+  <span class="divider__label divider__label--r">Neurodivergent Navigator</span>
+</div>
 
 <main id="main">
 
-  <!-- ================= HERO: bottom line first ================= -->
-  <section class="hero">
-    <div class="wrap hero-grid">
-      <div>
-        <span class="pill"><span aria-hidden="true">✦</span> A Claude AI skill · ADHD &amp; dyslexia</span>
-
+  <!-- 1 · RECOGNITION — flow. Establishes the split at 50/50 before anything moves. -->
+  <section class="sc-section hero" data-sc-act="flow">
+    <div class="q" data-sc-in>
+      <span>You type the same sentence into both</span>
+      <b>"I have 3 deadlines tomorrow and I can't start."</b>
+    </div>
+    <div class="pair">
+      <div class="side side--generic" data-label="Any AI" data-sc-in data-sc-stagger="60">
+        <h2 class="sub" style="font-size:var(--sc-t-2xl);line-height:1.1;margin:0 0 var(--sc-3);font-weight:600">
+          You get a wall of text and three questions back.
+        </h2>
+        <p class="sub">Ten options when you needed one. No sense that you were already overwhelmed before you started typing.</p>
+      </div>
+      <div class="side side--nav" data-label="Neurodivergent Navigator" data-sc-in data-sc-stagger="60">
         <h1>AI that leads with the&nbsp;answer.</h1>
-
-        <p class="kicker measure">
-          You've tried AI tools. They give you walls of text, generic advice, ten options
-          when you needed one — and zero awareness that you were already overwhelmed
-          before you started typing. <b>That's not a you problem. That's a tool problem.</b>
+        <p class="sub">A Claude skill for ADHD and dyslexic minds. That's not a you problem. It's a tool problem.</p>
+        <p style="margin:var(--sc-5) 0 0">
+          <a class="btn" data-buy href="#">Get the skill <span class="amt">$47</span></a>
         </p>
-
-        <div class="price-line">
-          <span class="price-big" data-gumroad-field="price">$47</span>
-          <span class="price-sub">one-time · instant download · 16.3&nbsp;KB toolkit</span>
-        </div>
-
-        <div class="cta-row">
-          <a class="btn" href="#" data-gumroad-action="buy">
-            Get the skill <span class="amt" data-gumroad-field="price">$47</span>
-          </a>
-          <a class="btn-ghost" href="#demo">See it in action ↓</a>
-        </div>
-        <p class="cta-note">Installs in under 10 minutes. No refunds — please read <a href="#policy">the policy</a> first.</p>
-      </div>
-
-      <figure class="shot">
-        <img
-          src="https://public-files.gumroad.com/38hqc1sd7pd267jskjhwun1p8rf5"
-          width="1280" height="720" loading="eager" decoding="async"
-          alt="Neurodivergent Navigator AI Skill for ADHD and dyslexic minds — product cover."
-          onerror="this.closest('figure').style.display='none'" />
-        <figcaption>Works in Claude via Settings → Skills. A Universal AI Prompt is included for ChatGPT, Gemini, and other chat tools.</figcaption>
-      </figure>
-    </div>
-
-    <div class="wrap">
-      <div class="facts rise">
-        <div class="fact"><b>8</b><span>emotional states detected</span></div>
-        <div class="fact"><b>7</b><span>life domains with their own protocol</span></div>
-        <div class="fact"><b>14</b><span>ready-to-use prompts</span></div>
-        <div class="fact"><b>1</b><span>question max, ever</span></div>
+        <p class="cta-note">One time. Instant download. Installs in under 10 minutes.</p>
       </div>
     </div>
   </section>
 
-  <!-- ================= THE DEMO ================= -->
-  <section class="sec-alt" id="demo">
-    <div class="wrap">
-      <p class="eyebrow">The difference</p>
-      <h2>Same question. Two very different&nbsp;answers.</h2>
-      <p class="lede measure">
-        This is the whole product in one screen. Nothing here is a mock-up of a
-        different tool — it's the behaviour the skill installs.
-      </p>
-
-      <div class="demo">
-        <div class="card">
-          <div class="card-head">
-            <span class="tag tag-bad">Generic AI</span>
-            <span style="font-size:.82rem;color:var(--text-mute)">wall of text · 3 questions back</span>
+  <!-- 2 · TENSION — pin. Both sides answer at once. One lands, one keeps going.
+       Grounds are already painted per column, so the greet rule is satisfied. -->
+  <section data-sc-act="pin" data-sc-span="2.2" id="demo">
+    <div data-sc-stage>
+      <div class="q"><span>Same question, both sides, live</span><b>"I have 3 deadlines tomorrow and I can't start."</b></div>
+      <div class="pair">
+        <div class="side side--generic" data-label="Any AI">
+          <div class="wall" id="wall">
+            <p data-sc-cue="0 0.30 0">Great question! Managing multiple competing deadlines can certainly feel overwhelming, and it's completely understandable that you're experiencing difficulty initiating your work right now.</p>
+            <p data-sc-cue="0.22 0.58">Let me walk you through a comprehensive framework for prioritisation. First, it's important to understand the underlying causes of task paralysis, which research suggests may stem from a combination of factors including perfectionism, fear of failure, and cognitive load.</p>
+            <p data-sc-cue="0.44 0.78">Here are ten strategies you might consider: 1) The Eisenhower Matrix, 2) Time blocking, 3) The Pomodoro Technique, 4) Eating the frog, 5) Chunking, 6) Body doubling, 7) Accountability partners, 8) Environment design, 9) Reward scheduling, 10) Habit stacking.</p>
+            <p data-answer data-sc-cue="0.62 1">So the one due soonest is probably where to start, though it depends on your situation.</p>
           </div>
-          <div class="chat">
-            <span class="you">"I have 3 deadlines tomorrow and I can't start."</span>
-            <div class="wall" aria-label="An overwhelming wall of generic AI text">
-              <p>Great question! Managing multiple competing deadlines can certainly feel
-              overwhelming, and it's completely understandable that you're experiencing
-              difficulty initiating your work right now.</p>
-              <p>Let me walk you through a comprehensive framework for prioritisation.
-              First, it's important to understand the underlying causes of task paralysis,
-              which research suggests may stem from a combination of factors including
-              perfectionism, fear of failure, and cognitive load…</p>
-              <p>Here are ten strategies you might consider: 1) The Eisenhower Matrix,
-              2) Time-blocking, 3) The Pomodoro Technique, 4) Eating the frog, 5) Chunking…</p>
-            </div>
-            <p style="margin-top:14px">
-              <span class="qmark">Would you like me to elaborate on any of these?
-              Should I help you prioritise? Do you want me to build a schedule?</span>
+          <p class="followups" data-sc-cue="0.66 1 0.05 0.02">Would you like me to elaborate on any of these? Should I help you prioritise? Do you want me to build a schedule?</p>
+        </div>
+        <div class="side side--nav" data-label="Neurodivergent Navigator" id="navcol">
+          <p class="answer-first" data-answer data-sc-cue="0 1 0 0">Start with the one due soonest. Open the file. That's it for now.</p>
+          <span class="detect" data-sc-cue="0.08 1">Detected: executive dysfunction</span>
+          <p class="body" data-sc-cue="0.16 1">You don't need a productivity system right now. Building one is another task, and you already have three. You need one action small enough that starting it isn't a decision.</p>
+          <p class="body one-q" data-sc-cue="0.30 1">Which deadline is closest?</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 · DOUBT — count. Real figures, counted off this page at load. -->
+  <section class="sc-section" data-sc-act="flow">
+    <div class="q" data-sc-in><span>What that cost you</span><b>Both answers are above. These are their real word counts.</b></div>
+    <div class="pair">
+      <div class="side side--generic" data-label="Any AI" data-sc-in data-sc-stagger="60">
+        <div class="tally">
+          <b><span id="c-wall" data-sc-count="0 0" data-sc-count-at="0.05 0.5">0</span></b>
+          <span class="unit">words to read before the answer arrives</span>
+        </div>
+        <p class="sub" style="margin-top:var(--sc-4)">Then three questions, none of which you can answer while you're stuck.</p>
+      </div>
+      <div class="side side--nav" data-label="Neurodivergent Navigator" data-sc-in data-sc-stagger="60">
+        <div class="tally">
+          <b><span id="c-ans" data-sc-count="0 0" data-sc-count-at="0.05 0.5">0</span></b>
+          <span class="unit">words to the answer. It is the first line.</span>
+        </div>
+        <p class="sub" style="margin-top:var(--sc-4)">Then one question, and only when it's actually needed.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 · STEADINESS — flow. The flattest act on the page, on purpose.
+       This is the silence the peak arrives from. -->
+  <section class="sc-section" data-sc-act="flow">
+    <div class="q" data-sc-in><span>What changes when you install it</span><b>It doesn't change what Claude says. It changes how Claude shows up.</b></div>
+    <div class="pair">
+      <div class="side side--generic" data-label="Any AI" data-sc-in data-sc-stagger="50">
+        <ul class="plain">
+          <li class="no"><i aria-hidden="true">·</i><span><b>Preamble first</b><span>Restates your question back at you before it starts.</span></span></li>
+          <li class="no"><i aria-hidden="true">·</i><span><b>Three questions back</b><span>Asked while you are already struggling to begin.</span></span></li>
+          <li class="no"><i aria-hidden="true">·</i><span><b>Ten options</b><span>A menu, when what you needed was one next action.</span></span></li>
+          <li class="no"><i aria-hidden="true">·</i><span><b>One flat voice</b><span>The same register whether you're in flow or in a shame spiral.</span></span></li>
+          <li class="no"><i aria-hidden="true">·</i><span><b>No memory of the session</b><span>You re-explain your context every time you come back.</span></span></li>
+        </ul>
+        <div class="wall" style="margin-top:var(--sc-6)">
+          <p>Of course, the right approach really depends on your individual circumstances, your working style, and what you have found effective in the past.</p>
+          <p>It may also be worth considering whether the underlying issue is one of motivation, of environment, or of task design, since each of those would suggest a somewhat different intervention.</p>
+          <p>I can go deeper on any of these areas if that would be helpful. Just let me know which direction you would like to take.</p>
+        </div>
+      </div>
+      <div class="side side--nav" data-label="Neurodivergent Navigator" data-sc-in data-sc-stagger="50">
+        <ul class="plain">
+          <li><i aria-hidden="true">✓</i><span><b>Bottom line first. Always.</b><span>No preamble. The answer comes first, every time.</span></span></li>
+          <li><i aria-hidden="true">✓</i><span><b>One question max</b><span>When clarification is needed it asks exactly one, and never while you're already struggling.</span></span></li>
+          <li><i aria-hidden="true">✓</i><span><b>Emotionally aware</b><span>It responds to where you are before it responds to what you asked.</span></span></li>
+          <li><i aria-hidden="true">✓</i><span><b>Seven domains, each with its own protocol</b><span>Not one generic voice stretched across all of them.</span></span></li>
+          <li><i aria-hidden="true">✓</i><span><b>Session management</b><span>Re-entry points, context anchors, and a closing summary so you never lose your place.</span></span></li>
+          <li><i aria-hidden="true">✓</i><span><b>Escalation built in</b><span>If signals cross into crisis territory it stops everything and surfaces real help, immediately.</span></span></li>
+        </ul>
+
+        <h3 style="margin-top:var(--sc-6)">The 8 states it recognises</h3>
+        <p class="sub" style="font-size:.94rem;margin:.4rem 0 var(--sc-3)">Detection drives the response. The same question gets a different shape depending on where you are.</p>
+        <ul class="chips">
+          <li>Executive dysfunction</li><li>Shame spiral</li><li>Cognitive overload</li><li>Depletion</li>
+          <li>Frustration</li><li>Flow</li><li>Existential</li><li>Mixed states</li>
+        </ul>
+
+        <h3 style="margin-top:var(--sc-5)">The 7 domains it covers</h3>
+        <ul class="chips" style="margin-top:.6rem">
+          <li>Business</li><li>Tech</li><li>High-stakes personal advocacy</li><li>Learning &amp; study</li>
+          <li>Personal &amp; family</li><li>Wellness</li><li>Spiritual life</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 · TRUST — reveal. The page tells some readers not to buy it. -->
+  <section class="sc-section" data-sc-act="flow">
+    <div class="q" data-sc-in><span>Honest fit check</span><b>Worth $47 to you, or not. Both are fine.</b></div>
+    <div class="pair">
+      <div class="side side--generic" data-label="Any AI"
+           data-sc-reveal="up" data-sc-reveal-at="0.10 0.52">
+        <h3>This is not for you if</h3>
+        <ul class="plain" style="margin-top:var(--sc-3)">
+          <li class="no"><i aria-hidden="true">✕</i><span><b>You have no Claude account</b><span>Though the included Universal AI Prompt works with any AI chat tool.</span></span></li>
+          <li class="no"><i aria-hidden="true">✕</i><span><b>You want a medical or mental-health tool</b><span>This is not that, and it says so in three places inside the product.</span></span></li>
+        </ul>
+        <p class="cta-note" style="margin-top:var(--sc-5)">All sales are final. Please read that line before you buy, not after.</p>
+        <div class="wall" style="margin-top:var(--sc-6)">
+          <p>There are of course many factors to weigh up here, and reasonable people might come to quite different conclusions depending on what they value most.</p>
+          <p>Would you like me to summarise the considerations? I could also put together a comparison table, or walk through some alternatives if that would be more useful.</p>
+        </div>
+      </div>
+      <div class="side side--nav" data-label="Neurodivergent Navigator"
+           data-sc-reveal="up" data-sc-reveal-at="0.16 0.60">
+        <h3>This is for you if</h3>
+        <ul class="plain" style="margin-top:var(--sc-3)">
+          <li><i aria-hidden="true">✓</i><span>You're an adult with ADHD, dyslexia, or both</span></li>
+          <li><i aria-hidden="true">✓</i><span>You're a neurodivergent entrepreneur or professional</span></li>
+          <li><i aria-hidden="true">✓</i><span>You've tried AI tools and felt they weren't built for your brain</span></li>
+        </ul>
+
+        <h3 style="margin-top:var(--sc-6)">Four files. One toolkit.</h3>
+        <ul class="plain" style="margin-top:var(--sc-3)">
+          <li><i aria-hidden="true">✓</i><span><b>neurodivergent-navigator-core.skill</b><span>Installs directly into Claude. Upload once and it's active.</span></span></li>
+          <li><i aria-hidden="true">✓</i><span><b>Install &amp; Usage Guide</b><span>Setup, the emotional-state reference, and a plain list of what Claude won't do.</span></span></li>
+          <li><i aria-hidden="true">✓</i><span><b>Prompt Library, 14 prompts</b><span>Onboarding, session management, and crisis-aware prompts.</span></span></li>
+          <li><i aria-hidden="true">✓</i><span><b>Universal AI Prompt</b><span>No Claude account? This works with ChatGPT, Gemini, and any AI chat tool.</span></span></li>
+        </ul>
+
+        <h3 style="margin-top:var(--sc-6)">Installing takes 4 steps</h3>
+        <ol class="steps" style="margin-top:var(--sc-3)">
+          <li>Log into <strong>claude.ai</strong></li>
+          <li>Settings → Skills → Install Skill</li>
+          <li>Upload the <strong>.skill</strong> file</li>
+          <li>New chat, then run the onboarding prompt once</li>
+        </ol>
+        <p class="sub" style="font-size:.94rem;margin-top:var(--sc-3)">Under 10 minutes. Works immediately.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 · RELIEF — THE PEAK. The collapse: the generic column leaves and the
+       answer column takes the full width for the first and only time.
+       Last act on the page, so its cues hold rather than fading out. -->
+  <section class="collapse" data-sc-act="pin" data-sc-span="3.2" id="get">
+    <div data-sc-stage>
+      <div class="pair">
+        <div class="side side--generic" aria-hidden="true">
+          <div class="wall">
+            <p>Of course! Here are a few more things you might want to consider before deciding, along with some additional context that may or may not be relevant to your particular situation.</p>
+            <p>Would you like me to summarise? Should I list the alternatives? Do you want a comparison table?</p>
+          </div>
+        </div>
+
+        <div class="side side--nav">
+          <div class="close-in">
+            <h2 data-sc-cue="0 1 0 0">Stop translating your brain for your tools.</h2>
+            <p class="lede" data-sc-cue="0.06">
+              Neurodivergent Navigator. A one-time $47, downloaded instantly, working in under ten minutes.
             </p>
+            <p style="margin:var(--sc-5) 0 0" data-sc-cue="0.10">
+              <a class="btn" data-buy href="#">Get the skill <span class="amt">$47</span></a>
+            </p>
+            <p class="cta-note" data-sc-cue="0.13">
+              Instant download &middot; 16.3&nbsp;KB &middot; all sales final &middot;
+              questions? <a href="mailto:getwireddifferently@gmail.com">getwireddifferently@gmail.com</a>
+            </p>
+
+            <form class="signup" style="margin-top:var(--sc-6)" data-sc-cue="0.17"
+                  action="https://buttondown.com/api/emails/embed-subscribe/getwireddifferently"
+                  method="post" target="popupwindow"
+                  onsubmit="window.open('https://buttondown.com/getwireddifferently','popupwindow')">
+              <p><strong>Not ready to buy? Take the free prompt instead.</strong>
+                The <a href="/answers/universal-ai-prompt/">Universal AI Prompt</a> works in ChatGPT, Gemini, or Claude,
+                with no signup. Or leave your email and I&rsquo;ll send new ones as I publish them.</p>
+              <div class="signup-row">
+                <label class="skip" for="bd-email">Your email address</label>
+                <input type="email" name="email" id="bd-email" placeholder="you@example.com" required>
+                <input type="hidden" name="embed" value="1">
+                <button type="submit">Send them to me</button>
+              </div>
+            </form>
+
+            <div class="foot" data-sc-cue="0.22">
+              <p><strong>Common questions:</strong>
+                <a href="/answers/chatgpt-wall-of-text/">Why AI answers in walls of text</a> &middot;
+                <a href="/answers/ai-asks-too-many-questions/">Why it asks three questions first</a> &middot;
+                <a href="/answers/ai-gives-too-many-options/">Why it gives ten options</a> &middot;
+                <a href="/answers/adhd-cant-start-task/">When you can&rsquo;t start</a></p>
+              <p><strong>Free:</strong>
+                <a href="/answers/universal-ai-prompt/">The Universal AI Prompt</a>. Works in ChatGPT, Gemini, or Claude. No signup.</p>
+              <p><strong>Neurodivergent Navigator</strong>, built for ADHD &amp; dyslexic minds.</p>
+              <p class="crisis">Not a medical or mental-health tool. In a crisis in the US: call or text <strong>988</strong> (veterans press 1), or text <strong>HOME</strong> to <strong>741741</strong>.</p>
+            </div>
           </div>
         </div>
-
-        <div class="card">
-          <div class="card-head">
-            <span class="tag tag-good">With Navigator</span>
-            <span style="font-size:.82rem;color:var(--text-mute)">answer first · 1 question</span>
-          </div>
-          <div class="chat">
-            <span class="you">"I have 3 deadlines tomorrow and I can't start."</span>
-            <p class="answer-first">Start with the one due soonest. Open the file. That's it for now.</p>
-            <span class="detect">Detected: executive dysfunction</span>
-            <p>You don't need a productivity system right now — building one is another
-            task, and you already have three. You need one action small enough that
-            starting it isn't a decision.</p>
-            <p class="one-q">Which deadline is closest?</p>
-          </div>
-        </div>
       </div>
-    </div>
-  </section>
-
-  <!-- ================= WHAT CHANGES ================= -->
-  <section>
-    <div class="wrap">
-      <p class="eyebrow">What changes the moment you install it</p>
-      <h2>It doesn't change what Claude says. It changes how Claude shows up.</h2>
-
-      <div class="grid grid-3" style="margin-top:26px">
-        <div class="feat rise">
-          <div class="ico" aria-hidden="true">↑</div>
-          <h3>Bottom line first. Always.</h3>
-          <p>No preamble. No restating your question back at you. The answer comes first, every time.</p>
-        </div>
-        <div class="feat rise">
-          <div class="ico" aria-hidden="true">◈</div>
-          <h3>Emotionally aware</h3>
-          <p>It responds to where you are before it responds to what you asked.</p>
-        </div>
-        <div class="feat rise">
-          <div class="ico" aria-hidden="true">?</div>
-          <h3>One question max</h3>
-          <p>When clarification is needed it asks exactly one — never three, and never while you're already struggling.</p>
-        </div>
-        <div class="feat rise">
-          <div class="ico" aria-hidden="true">⌸</div>
-          <h3>Session management</h3>
-          <p>Re-entry points, context anchors, and a closing summary so you never lose your place mid-session.</p>
-        </div>
-        <div class="feat rise">
-          <div class="ico" aria-hidden="true">⌘</div>
-          <h3>Built for every domain</h3>
-          <p>Seven areas of life, each with its own protocol — not one generic voice stretched across all of them.</p>
-        </div>
-        <div class="feat rise">
-          <div class="ico" aria-hidden="true">✚</div>
-          <h3>Escalation built in</h3>
-          <p>If signals cross into crisis territory it stops everything and surfaces real help, immediately.</p>
-        </div>
-      </div>
-
-      <h3 style="margin-top:44px">The 8 states it recognises</h3>
-      <p class="measure" style="color:var(--text-soft);margin-bottom:0">
-        Detection drives the response — the same question gets a different shape depending on where you are.
-      </p>
-      <div class="states">
-        <span class="state"><em>01</em> Executive dysfunction</span>
-        <span class="state"><em>02</em> Shame spiral</span>
-        <span class="state"><em>03</em> Cognitive overload</span>
-        <span class="state"><em>04</em> Depletion</span>
-        <span class="state"><em>05</em> Frustration</span>
-        <span class="state"><em>06</em> Flow</span>
-        <span class="state"><em>07</em> Existential</span>
-        <span class="state"><em>08</em> Mixed states</span>
-      </div>
-
-      <h3 style="margin-top:40px">The 7 domains it covers</h3>
-      <div class="doms">
-        <span class="dom">Business</span>
-        <span class="dom">Tech</span>
-        <span class="dom">High-stakes personal advocacy</span>
-        <span class="dom">Learning &amp; study</span>
-        <span class="dom">Personal &amp; family</span>
-        <span class="dom">Wellness</span>
-        <span class="dom">Spiritual life</span>
-      </div>
-    </div>
-  </section>
-
-  <!-- ================= INCLUDED ================= -->
-  <section class="sec-alt">
-    <div class="wrap">
-      <p class="eyebrow">What's in your download</p>
-      <h2>Four files. One&nbsp;toolkit.</h2>
-
-      <ul class="inc measure" style="--measure:72ch">
-        <li>
-          <span class="chk" aria-hidden="true">✓</span>
-          <span><b>neurodivergent-navigator-core.skill</b>
-          <span>Installs directly into Claude — upload once and it's active.</span></span>
-        </li>
-        <li>
-          <span class="chk" aria-hidden="true">✓</span>
-          <span><b>Install &amp; Usage Guide</b>
-          <span>Step-by-step setup, the emotional-state reference, and a plain list of what Claude won't do.</span></span>
-        </li>
-        <li>
-          <span class="chk" aria-hidden="true">✓</span>
-          <span><b>Prompt Library — 14 prompts</b>
-          <span>Including the one-time onboarding prompt, session management, and crisis-aware prompts.</span></span>
-        </li>
-        <li>
-          <span class="chk" aria-hidden="true">✓</span>
-          <span><b>Universal AI Prompt</b>
-          <span>No Claude account? This works with ChatGPT, Gemini, and any AI chat tool.</span></span>
-        </li>
-      </ul>
-
-      <h3 style="margin-top:44px">Installing takes 4 steps</h3>
-      <ol class="steps">
-        <li><p>Log into <strong>claude.ai</strong></p></li>
-        <li><p>Settings → Skills → Install Skill</p></li>
-        <li><p>Upload the <strong>.skill</strong> file</p></li>
-        <li><p>New chat → run the onboarding prompt once</p></li>
-      </ol>
-      <p style="margin-top:18px;color:var(--text-soft)">Under 10 minutes. Works immediately.</p>
-    </div>
-  </section>
-
-  <!-- ================= FIT ================= -->
-  <section>
-    <div class="wrap">
-      <p class="eyebrow">Honest fit check</p>
-      <h2>Worth $47 to you — or not. Both are fine.</h2>
-
-      <div class="fit" style="margin-top:24px">
-        <div class="fit-col yes">
-          <h3>This is for you if</h3>
-          <ul>
-            <li><i aria-hidden="true">✓</i><span>You're an adult with ADHD, dyslexia, or both</span></li>
-            <li><i aria-hidden="true">✓</i><span>You're a neurodivergent entrepreneur or professional</span></li>
-            <li><i aria-hidden="true">✓</i><span>You've tried AI tools and felt they weren't built for your brain</span></li>
-          </ul>
-        </div>
-        <div class="fit-col no">
-          <h3>This is not for you if</h3>
-          <ul>
-            <li><i aria-hidden="true">✕</i><span>You have no Claude account — though the included Universal AI Prompt works with any AI</span></li>
-            <li><i aria-hidden="true">✕</i><span>You're looking for a medical or mental-health tool. This is not that.</span></li>
-          </ul>
-        </div>
-      </div>
-
-      <div id="policy" style="margin-top:26px">
-        <div class="note">
-          <b>Not a medical or mental-health tool.</b> Neurodivergent Navigator changes how an
-          AI assistant communicates. It does not diagnose, treat, or provide clinical care.
-          It does include crisis escalation: if signals cross into crisis territory it stops
-          and surfaces help — <b>988</b> (veterans: press 1), or text <b>HOME</b> to <b>741741</b> in the US.
-        </div>
-        <div class="note">
-          <b>Refund policy: all sales are final.</b> Because this is a digital download,
-          no refunds are offered. Please use the fit check above before buying.
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ================= FINAL CTA ================= -->
-  <section class="sec-alt">
-    <div class="wrap">
-      <div class="final">
-        <p class="eyebrow">One decision left</p>
-        <h2 style="max-width:26ch">Stop translating your brain for your tools.</h2>
-        <p class="lede measure">
-          <span data-gumroad-field="name">Neurodivergent Navigator AI Skill for ADHD &amp; Dyslexic Minds</span>
-          — a one-time <span data-gumroad-field="price">$47</span>, downloaded instantly, working in under ten minutes.
-        </p>
-        <div class="cta-row" style="margin-top:22px">
-          <a class="btn" href="#" data-gumroad-action="buy">
-            Get the skill <span class="amt" data-gumroad-field="price">$47</span>
-          </a>
-        </div>
-        <p class="cta-note">
-          Instant download · 16.3&nbsp;KB · all sales final ·
-          questions? <a href="mailto:getwireddifferently@gmail.com">getwireddifferently@gmail.com</a>
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <!-- ================= NEWSLETTER ================= -->
-  <section style="padding-top:0">
-    <div class="wrap narrow">
-      <form class="signup" action="https://buttondown.com/api/emails/embed-subscribe/getwireddifferently"
-            method="post" target="popupwindow"
-            onsubmit="window.open('https://buttondown.com/getwireddifferently','popupwindow')">
-        <p><strong>Not ready to buy? Take the free prompt instead.</strong>
-        The <a href="/answers/universal-ai-prompt/">Universal AI Prompt</a> works in ChatGPT, Gemini, or Claude —
-        no signup. Or leave your email and I&rsquo;ll send new ones as I publish them.</p>
-        <div class="signup-row">
-          <label class="skip" for="bd-email">Your email address</label>
-          <input type="email" name="email" id="bd-email" placeholder="you@example.com" required>
-          <input type="hidden" name="embed" value="1">
-          <button type="submit">Send them to me</button>
-        </div>
-      </form>
     </div>
   </section>
 
 </main>
 
-<footer>
-  <div class="wrap">
-    <p><strong>Common questions:</strong>
-      <a href="/answers/chatgpt-wall-of-text/">Why AI answers in walls of text</a> ·
-      <a href="/answers/ai-asks-too-many-questions/">Why it asks three questions first</a> ·
-      <a href="/answers/ai-gives-too-many-options/">Why it gives ten options</a> ·
-      <a href="/answers/adhd-cant-start-task/">When you can&rsquo;t start</a></p>
-    <p><strong>Free:</strong>
-      <a href="/answers/universal-ai-prompt/">The Universal AI Prompt</a> — works in ChatGPT, Gemini, or Claude. No signup.</p>
-    <p><strong>Neurodivergent Navigator</strong> — built for ADHD &amp; dyslexic minds.</p>
-    <p>Not a medical or mental-health tool. In a crisis in the US: call or text <strong>988</strong> (veterans press 1), or text <strong>HOME</strong> to <strong>741741</strong>.</p>
-  </div>
-</footer>
-
+<script src="sc/scrollcraft.js"></script>
 <script>
 (function () {
   "use strict";
 
-  /* ---- theme toggle: auto → light → dark, persisted when allowed ---- */
+  /* ------------------------------------------------------------------
+     THE ONE LINE TO EDIT.
+     Paste the Gumroad product URL here and both buy buttons point at it.
+     Until then they are marked unavailable rather than silently dead,
+     which is what href="#" was doing before.
+     ------------------------------------------------------------------ */
+  var BUY_URL = "https://getwireddifferently.gumroad.com/l/neurodivergent-navigator";
+
+  var buys = document.querySelectorAll("[data-buy]");
+  for (var b = 0; b < buys.length; b++) {
+    if (BUY_URL) {
+      buys[b].setAttribute("href", BUY_URL);
+    } else {
+      /* no href at all, so it is not focusable and not clickable, rather than
+         a link that swallows the click and goes nowhere. */
+      buys[b].removeAttribute("href");
+      buys[b].setAttribute("role", "button");
+      buys[b].setAttribute("aria-disabled", "true");
+      buys[b].setAttribute("title", "Checkout link not configured yet");
+    }
+  }
+
+  /* ---- theme: auto to light to dark, persisted when allowed ---- */
   var root = document.documentElement,
-      btn  = document.getElementById("theme"),
-      ico  = document.getElementById("theme-ico"),
-      txt  = document.getElementById("theme-txt"),
+      btn = document.getElementById("theme"),
+      ico = document.getElementById("theme-ico"),
+      txt = document.getElementById("theme-txt"),
       order = ["auto", "light", "dark"],
       label = { auto: "Auto", light: "Light", dark: "Dark" },
-      icon  = { auto: "◐", light: "☀", dark: "☾" };
-
+      icon = { auto: "◐", light: "☀", dark: "☾" };
   function store(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
   function load(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
-
   function apply(mode) {
     root.setAttribute("data-theme", mode);
     if (ico) ico.textContent = icon[mode];
     if (txt) txt.textContent = label[mode];
     if (btn) btn.setAttribute("aria-label", "Colour theme: " + label[mode] + ". Click to change.");
   }
-
   var saved = load("nn-theme");
   apply(order.indexOf(saved) > -1 ? saved : "auto");
+  if (btn) btn.addEventListener("click", function () {
+    apply(order[(order.indexOf(root.getAttribute("data-theme")) + 1) % order.length]);
+    store("nn-theme", root.getAttribute("data-theme"));
+  });
 
-  if (btn) {
-    btn.addEventListener("click", function () {
-      var next = order[(order.indexOf(root.getAttribute("data-theme")) + 1) % order.length];
-      apply(next);
-      store("nn-theme", next);
-    });
+  /* ---- real word counts, measured off this page so they cannot drift
+          from the copy above them ---- */
+  function words(el) {
+    if (!el) return 0;
+    var t = (el.textContent || "").replace(/\s+/g, " ").trim();
+    return t ? t.split(" ").length : 0;
+  }
+  var wall = document.getElementById("wall"),
+      ans  = document.querySelector("#navcol [data-answer]"),
+      cW   = document.getElementById("c-wall"),
+      cA   = document.getElementById("c-ans");
+  if (cW && wall) cW.setAttribute("data-sc-count", "0 " + words(wall));
+  if (cA && ans)  cA.setAttribute("data-sc-count", "0 " + words(ans));
+
+  /* ---- mount the engine only after the counts are true ---- */
+  ScrollCraft.mount(document.body);
+
+  /* ---- SIGNATURE MOVE: the answer-depth gauge.
+          How far down each column its actual answer sits, measured off
+          the real DOM every frame. One side keeps sinking. ---- */
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var demo = document.getElementById("demo"),
+      colL = demo && demo.querySelector(".side--generic"),
+      colR = document.getElementById("navcol"),
+      mkL = document.getElementById("mk-l"), capL = document.getElementById("cap-l"),
+      mkR = document.getElementById("mk-r"), capR = document.getElementById("cap-r"),
+      collapseAct = document.getElementById("get");
+
+  function depth(col, sel) {
+    if (!col) return null;
+    var a = col.querySelector(sel);
+    if (!a) return null;
+    var cr = col.getBoundingClientRect(), ar = a.getBoundingClientRect();
+    if (cr.height < 1) return null;
+    var d = (ar.top + ar.height / 2 - cr.top) / cr.height;
+    return Math.max(0, Math.min(1, d));
   }
 
-  /* ---- scroll reveal, skipped entirely when reduced motion is preferred ---- */
-  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches,
-      items  = document.querySelectorAll(".rise");
-
-  if (reduce || !("IntersectionObserver" in window)) {
-    for (var i = 0; i < items.length; i++) items[i].classList.add("in");
-  } else {
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (e) {
-        if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
-      });
-    }, { rootMargin: "0px 0px -8% 0px", threshold: 0.1 });
-    for (var j = 0; j < items.length; j++) io.observe(items[j]);
+  function paint() {
+    /* the gauge only means anything once both answers are on screen, so it
+       arrives with the demo act rather than sitting on the hero. */
+    if (demo) {
+      var dr = demo.getBoundingClientRect();
+      if (dr.top < innerHeight * 0.6) root.style.setProperty("--gauge-op", "1");
+    }
+    if (colL && mkL) {
+      var dL = depth(colL, "[data-answer]");
+      if (dL !== null) {
+        mkL.style.setProperty("--at", (dL * 100).toFixed(1) + "%");
+        capL.style.setProperty("--at", (dL * 100).toFixed(1) + "%");
+        capL.textContent = "answer " + Math.round(dL * 100) + "% down";
+      }
+    }
+    if (colR && mkR) {
+      var dR = depth(colR, "[data-answer]");
+      if (dR !== null) {
+        mkR.style.setProperty("--at", (dR * 100).toFixed(1) + "%");
+        capR.style.setProperty("--at", (dR * 100).toFixed(1) + "%");
+        capR.textContent = "answer " + Math.round(dR * 100) + "% down";
+      }
+    }
+    /* mirror the collapse act's own progress onto :root so the fixed
+       divider can leave with it. reads the engine's value, never its own. */
+    if (collapseAct) {
+      var p = parseFloat(getComputedStyle(collapseAct).getPropertyValue("--sc-p")) || 0;
+      root.style.setProperty("--collapse", p.toFixed(3));
+    }
   }
+
+  var queued = false;
+  function onScroll() {
+    if (queued) return;
+    queued = true;
+    requestAnimationFrame(function () { queued = false; paint(); });
+  }
+  addEventListener("scroll", onScroll, { passive: true });
+  addEventListener("resize", onScroll);
+  paint();
 })();
 </script>
-
 </body>
 </html>

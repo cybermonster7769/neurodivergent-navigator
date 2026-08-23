@@ -4,3 +4,10 @@ Thumbs.db
 # Never publish the paid product from this PUBLIC repo
 *.zip
 *.skill
+
+# scrollcraft build workspace — working files, not published
+scrollcraft/
+
+# verification harness output and its dependency
+lab/
+node_modules/
