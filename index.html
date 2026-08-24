@@ -172,6 +172,26 @@
   .q b { display: block; font-size: clamp(1.05rem, 2.2vw, 1.35rem); font-weight: 600; line-height: 1.5; }
   .q span { display: block; font-size: .8rem; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-mute); margin-bottom: .5rem; }
 
+  /* ---------------------------------------------- the evidence ----
+     A real capture, not a rebuild of one. It carries Claude's own dark
+     chrome, so it is framed rather than floated — on the light theme an
+     unframed dark rectangle reads as a hole punched in the page. */
+  .shot {
+    width: min(92vw, 60rem); margin: var(--sc-5) auto 0;
+    padding: clamp(.5rem, 1.2vw, .9rem);
+    background: var(--sc-surface);
+    border: 1px solid var(--edge);
+    border-radius: 14px;
+    /* the divider is fixed chrome at z-40 and would otherwise draw a hairline
+       straight through the screenshot. the evidence lies ON the argument. */
+    position: relative; z-index: 41;
+  }
+  .shot img { display: block; width: 100%; height: auto; border-radius: 8px; }
+  .shot figcaption {
+    margin: var(--sc-3) .3rem 0; font-size: .88rem; line-height: 1.6;
+    color: var(--sc-ink-soft); max-width: var(--measure);
+  }
+
   /* ------------------------------------------------- the hero ---- */
   .hero { padding-top: clamp(4.5rem, 9vh, 7rem); }
   .hero h1 {
@@ -417,6 +437,25 @@
     </div>
   </section>
 
+  <!-- 3b · EVIDENCE — flow. The claim above is a comparison the page wrote
+       about itself. This is the skill actually running, so the reader has one
+       thing on the page that was not authored by the seller. -->
+  <section class="sc-section" data-sc-act="flow" id="evidence">
+    <div class="q" data-sc-in>
+      <span>Not a mock-up</span>
+      <b>This is the skill running in Claude. Unedited.</b>
+    </div>
+    <figure class="shot" data-sc-in data-sc-stagger="60">
+      <img src="img/skill-in-claude.png"
+           alt="A Claude conversation. The typed message reads: I have 3 deadlines tomorrow and I can't start. Claude replies with a bold single action — open a blank note and write the three deadlines down, one line each — then a line reading Detected: executive dysfunction, a short explanation, and one closing question."
+           width="2349" height="1113" decoding="async">
+      <figcaption>
+        The answer is the first line. The state is named out loud. One question at the
+        end, not three at the start. Nothing here was staged for the screenshot.
+      </figcaption>
+    </figure>
+  </section>
+
   <!-- 4 · STEADINESS — flow. The flattest act on the page, on purpose.
        This is the silence the peak arrives from. -->
   <section class="sc-section" data-sc-act="flow">
@@ -628,7 +667,8 @@
       colR = document.getElementById("navcol"),
       mkL = document.getElementById("mk-l"), capL = document.getElementById("cap-l"),
       mkR = document.getElementById("mk-r"), capR = document.getElementById("cap-r"),
-      collapseAct = document.getElementById("get");
+      collapseAct = document.getElementById("get"),
+      evidence = document.getElementById("evidence");
 
   function depth(col, sel) {
     if (!col) return null;
@@ -646,6 +686,12 @@
     if (demo) {
       var dr = demo.getBoundingClientRect();
       if (dr.top < innerHeight * 0.6) root.style.setProperty("--gauge-op", "1");
+    }
+    /* the gauge measured the two answers; once the evidence act arrives it has
+       said what it had to say, and its captions would ride over the capture. */
+    if (evidence) {
+      var er = evidence.getBoundingClientRect();
+      root.style.setProperty("--gauge-op", er.top < innerHeight * 0.75 ? "0" : "1");
     }
     if (colL && mkL) {
       var dL = depth(colL, "[data-answer]");
